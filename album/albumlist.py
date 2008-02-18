@@ -3,6 +3,9 @@ pygtk.require('2.0')
 import gtk
 import gobject
 from collections import deque
+from xmmsclient import collections as xc
+import operator
+from album import Album
 
 
 COVER_SIZE = 64
@@ -36,6 +39,30 @@ class AlbumList(gtk.TreeView):
         self.append_column(self.name_column)
 
         self.set_model(self.list_store)
+
+        def song_list(result):
+            duration = 0
+            last = None
+            album = None
+            songs = result.value()
+            songs.sort(key=operator.itemgetter('album'))
+            for song in songs:
+                if last and last == song['album']:
+                    album.increase_size()
+                    album.add_duration(song['duration'])
+                else:
+                    if album:
+                        self.add_album(album)
+                    album = Album(xmms, song['album'], song['artist'],
+                            song['picture_front'], 1, song['duration'])
+
+                last = song['album']
+
+            self.add_album(album)
+
+        xmms.coll_query_infos(xc.Universe(),
+                ['id', 'album', 'artist', 'duration', 'picture_front'],
+                cb=song_list)
 
 
     def __increase_ids(self):
