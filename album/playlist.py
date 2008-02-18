@@ -29,3 +29,18 @@ class PlayList(gtk.TreeView):
         self.append_column(self.name_column)
 
         self.set_model(self.list_store)
+
+        def id_info(result):
+            self.add_entry(id, result.value()['artist'],
+                    result.value()['title'])
+
+        def entry_list(result):
+            for id in result.value():
+                self.__xmms.medialib_get_info(id, cb=id_info)
+
+        self.__xmms.playlist_list_entries(cb=entry_list)
+
+
+    def add_entry(self, id, artist, title):
+        # FIXME: Escape album name, etc.
+        self.list_store.append([None, '<b>%s</b>\n%s' % (title, artist), id])
