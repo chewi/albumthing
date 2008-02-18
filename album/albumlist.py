@@ -14,8 +14,8 @@ class AlbumList(gtk.TreeView):
     def __init__(self, xmms):
         super(AlbumList, self).__init__()
 
-        self.xmms = xmms
-        self.ids = 0
+        self.__xmms = xmms
+        self.__ids = 0
 
         self.set_headers_visible(False)
 
@@ -51,20 +51,21 @@ class AlbumList(gtk.TreeView):
                 else:
                     if album:
                         self.add_album(album)
-                    album = Album(self, xmms, song['album'], song['artist'],
-                            song['picture_front'], 1, song['duration'])
+                    album = Album(self, self.__xmms, song['album'],
+                            song['artist'], song['picture_front'], 1,
+                            song['duration'])
 
                 last = song['album']
 
             self.add_album(album)
 
-        xmms.coll_query_infos(xc.Universe(),
+        self.__xmms.coll_query_infos(xc.Universe(),
                 ['id', 'album', 'artist', 'duration', 'picture_front'],
                 cb=song_list)
 
 
     def __increase_ids(self):
-        self.ids = self.ids + 1
+        self.__ids = self.__ids + 1
 
 
     def add_album(self, album):
@@ -73,9 +74,9 @@ class AlbumList(gtk.TreeView):
         """
 
         # FIXME: Escape album name, etc.
-        self.list_store.append([None, '<b>%s</b>\n%s <small>- %d Tracks/%d:%02d Minutes</small>' % (album.name, album.artist, album.size, album.get_duration_min(), album.get_duration_sec()), self.ids])
+        self.list_store.append([None, '<b>%s</b>\n%s <small>- %d Tracks/%d:%02d Minutes</small>' % (album.name, album.artist, album.size, album.get_duration_min(), album.get_duration_sec()), self.__ids])
 
-        album.set_id(self.ids)
+        album.set_id(self.__ids)
         self.__increase_ids()
 
 
