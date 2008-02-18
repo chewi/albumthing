@@ -7,7 +7,7 @@ import operator
 from album import Album
 
 
-COVER_SIZE = 64
+COVER_SIZE = 40
 
 
 class AlbumList(gtk.TreeView):
