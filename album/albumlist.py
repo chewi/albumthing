@@ -2,7 +2,6 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 import gobject
-from collections import deque
 from xmmsclient import collections as xc
 import operator
 from album import Album
@@ -17,7 +16,6 @@ class AlbumList(gtk.TreeView):
 
         self.xmms = xmms
         self.ids = 0
-        self.picture_queue = deque()
 
         self.set_headers_visible(False)
 
@@ -53,7 +51,7 @@ class AlbumList(gtk.TreeView):
                 else:
                     if album:
                         self.add_album(album)
-                    album = Album(xmms, song['album'], song['artist'],
+                    album = Album(self, xmms, song['album'], song['artist'],
                             song['picture_front'], 1, song['duration'])
 
                 last = song['album']
@@ -74,24 +72,10 @@ class AlbumList(gtk.TreeView):
         Adds an Album to the list
         """
 
-        def __bindata_retrieve(result):
-            pixbuf_loader = gtk.gdk.PixbufLoader()
-            pixbuf_loader.write(result.get_bin())
-            pixbuf_loader.close()
-            try:
-                id = self.picture_queue.pop ()
-            except IndexError:
-                return
-            self.set_cover(id, pixbuf_loader.get_pixbuf())
-
         # FIXME: Escape album name, etc.
         self.list_store.append([None, '<b>%s</b>\n%s <small>- %d Tracks/%d:%02d Minutes</small>' % (album.name, album.artist, album.size, album.get_duration_min(), album.get_duration_sec()), self.ids])
 
-        if album.picture_front:
-            self.picture_queue.appendleft(self.ids)
-            self.xmms.bindata_retrieve(album.picture_front,
-                    cb=__bindata_retrieve)
-
+        album.set_id(self.ids)
         self.__increase_ids()
 
 

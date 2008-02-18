@@ -5,18 +5,20 @@ import gobject
 
 
 class Album:
-    def __init__(self, xmms, name, artist, picture_front, size=0, duration=0):
+    def __init__(self, albumlist, xmms, name, artist, picture_front, size=0,
+            duration=0):
+        self.__album_list = albumlist
         def __bindata_retrieve(result):
             buf = result.get_bin()
-#            filename = self.picture_front
-#            file = open(filename, 'w')
-#            file.write(buf)
-#            file.close
             self.__pixbuf_loader.write(buf)
             self.__pixbuf_loader.close()
+            if self.__id > -1:
+                albumlist.set_cover(self.__id,
+                        self.__pixbuf_loader.get_pixbuf())
 
         self.__xmms = xmms
         self.__pixbuf_loader = gtk.gdk.PixbufLoader()
+        self.__id = -1
         self.name = name
         self.artist = artist
         self.size = size
@@ -45,3 +47,9 @@ class Album:
 
     def get_duration_sec(self):
         return (self.duration / 1000) % 60
+
+
+    def set_id(self, id):
+        self.__id = id
+        if self.__pixbuf_loader.get_pixbuf():
+            albumlist.set_cover(self.__id, self.__pixbuf_loader.get_pixbuf())
