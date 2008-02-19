@@ -49,6 +49,7 @@ class AlbumList(gtk.TreeView):
 
 
     def __xmms_cb_song_list(self, result):
+        self.list_store.clear()
         duration = 0
         last_album = None
         last_artist = None
@@ -149,3 +150,12 @@ class AlbumList(gtk.TreeView):
                 self.list_store.set_value(iter, 0, pixbuf)
                 break
             iter = self.list_store.iter_next(iter)
+
+
+    def filter(self, string):
+        coll_artist = xc.Match(field='artist', value=string)
+        coll_album = xc.Match(field='album', value=string)
+        coll_title = xc.Match(field='title', value=string)
+        self.__xmms.coll_query_infos(xc.Union(coll_artist, coll_album, coll_title),
+                ['id', 'album', 'artist', 'duration', 'picture_front'],
+                cb=self.__xmms_cb_song_list)
