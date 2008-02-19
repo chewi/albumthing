@@ -56,8 +56,8 @@ class PlayList(gtk.TreeView):
         i = 0
         iter = self.list_store.get_iter_first()
         while iter:
+            self.list_store.set_value(iter, 0, None)
             if id == i:
                 self.list_store.set_value(iter, 0, gtk.STOCK_MEDIA_PLAY)
-                break
             i = i + 1
             iter = self.list_store.iter_next(iter)
