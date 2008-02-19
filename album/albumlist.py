@@ -41,67 +41,70 @@ class AlbumList(gtk.TreeView):
 
         self.set_model(self.list_store)
 
-        def song_list(result):
-            duration = 0
-            last_album = None
-            last_artist = None
-            album = None
-            songs = result.value()
-            songs.sort(key=operator.itemgetter('album', 'artist'))
-            for song in songs:
-                if album and last_album == song['album'] and \
-                        last_artist == song['artist']:
-                    album.increase_size()
-                    album.add_duration(song['duration'])
-                else:
-                    if album:
-                        self.add_album(album)
-                    album = Album(self, self.__xmms, song['album'],
-                            song['artist'], song['picture_front'], 1,
-                            song['duration'])
-
-                last_album = song['album']
-                last_artist = song['artist']
-
-            self.add_album(album)
-
         self.__xmms.coll_query_infos(xc.Universe(),
                 ['id', 'album', 'artist', 'duration', 'picture_front'],
-                cb=song_list)
+                cb=self.__xmms_cb_song_list)
 
-        def id_list(result):
-            self.__xmms.playlist_clear('_album')
-            for id in result.value():
-                self.__xmms.playlist_add_id(id, '_album')
-            self.__xmms.playlist_load('_album')
+        self.get_selection().connect('changed', self.__gtk_cb_selection_changed, None)
 
-        def selection_changed(selection, user_data):
-           (model, rows) = selection.get_selected_rows()
-           colls = []
-           for path in rows:
-               iter = self.list_store.get_iter(path)
-               artist = self.list_store.get_value(iter, 3)
-               album = self.list_store.get_value(iter, 4)
-               if not artist and not album:
-                   colls.append(xc.Intersection(
-                       xc.Complement(xc.Has(xc.Universe(), 'artist')),
-                       xc.Complement(xc.Has(xc.Universe(), 'album'))))
-               elif not artist:
-                   colls.append(xc.Intersection(
-                       xc.Complement(xc.Has(xc.Universe(), 'artist')),
-                       xc.Equals(field='album', value=album)))
-               elif not album:
-                   colls.append(xc.Intersection(
-                       xc.Complement(xc.Has(xc.Universe(), 'album')),
-                       xc.Equals(field='artist', value=artist)))
-               else:
-                   colls.append(xc.Intersection(
-                       xc.Equals(field='artist', value=artist),
-                       xc.Equals(field='album', value=album)))
-           coll = xc.Union(*colls)
-           self.__xmms.coll_query_ids(coll, cb=id_list)
 
-        self.get_selection().connect('changed', selection_changed, None)
+    def __xmms_cb_song_list(self, result):
+        duration = 0
+        last_album = None
+        last_artist = None
+        album = None
+        songs = result.value()
+        songs.sort(key=operator.itemgetter('album', 'artist'))
+        for song in songs:
+            if album and last_album == song['album'] and \
+                    last_artist == song['artist']:
+                album.increase_size()
+                album.add_duration(song['duration'])
+            else:
+                if album:
+                    self.add_album(album)
+                album = Album(self, self.__xmms, song['album'],
+                        song['artist'], song['picture_front'], 1,
+                        song['duration'])
+
+            last_album = song['album']
+            last_artist = song['artist']
+
+        self.add_album(album)
+
+
+    def __xmms_cb_id_list(self, result):
+        self.__xmms.playlist_clear('_album')
+        for id in result.value():
+            self.__xmms.playlist_add_id(id, '_album')
+        self.__xmms.playlist_load('_album')
+
+
+    def __gtk_cb_selection_changed(self, selection, user_data):
+       (model, rows) = selection.get_selected_rows()
+       colls = []
+       for path in rows:
+           iter = self.list_store.get_iter(path)
+           artist = self.list_store.get_value(iter, 3)
+           album = self.list_store.get_value(iter, 4)
+           if not artist and not album:
+               colls.append(xc.Intersection(
+                   xc.Complement(xc.Has(xc.Universe(), 'artist')),
+                   xc.Complement(xc.Has(xc.Universe(), 'album'))))
+           elif not artist:
+               colls.append(xc.Intersection(
+                   xc.Complement(xc.Has(xc.Universe(), 'artist')),
+                   xc.Equals(field='album', value=album)))
+           elif not album:
+               colls.append(xc.Intersection(
+                   xc.Complement(xc.Has(xc.Universe(), 'album')),
+                   xc.Equals(field='artist', value=artist)))
+           else:
+               colls.append(xc.Intersection(
+                   xc.Equals(field='artist', value=artist),
+                   xc.Equals(field='album', value=album)))
+       coll = xc.Union(*colls)
+       self.__xmms.coll_query_ids(coll, cb=self.__xmms_cb_id_list)
 
 
     def __increase_ids(self):

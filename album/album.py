@@ -8,15 +8,6 @@ class Album:
     def __init__(self, albumlist, xmms, name, artist, picture_front, size=0,
             duration=0):
         self.__album_list = albumlist
-        def __bindata_retrieve(result):
-            try:
-                self.__pixbuf_loader.write(result.value())
-                self.__pixbuf_loader.close()
-                if self.__id > -1:
-                    albumlist.set_cover(self.__id,
-                            self.__pixbuf_loader.get_pixbuf())
-            except:
-                pass
 
         self.__xmms = xmms
         self.__pixbuf_loader = gtk.gdk.PixbufLoader()
@@ -28,7 +19,18 @@ class Album:
         self.picture_front = picture_front
 
         if picture_front:
-            xmms.bindata_retrieve(picture_front, cb=__bindata_retrieve)
+            xmms.bindata_retrieve(picture_front, cb=self.__xmms_cb_bindata_retrieve)
+
+
+    def __xmms_cb_bindata_retrieve(self, result):
+        try:
+            self.__pixbuf_loader.write(result.value())
+            self.__pixbuf_loader.close()
+            if self.__id > -1:
+                albumlist.set_cover(self.__id,
+                        self.__pixbuf_loader.get_pixbuf())
+        except:
+            pass
 
 
     def increase_size(self, size=1):

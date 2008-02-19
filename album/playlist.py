@@ -35,80 +35,88 @@ class PlayList(gtk.TreeView):
 
         self.set_model(self.list_store)
 
-        def id_info(result):
-            try:
-                artist = result.value()['artist']
-            except KeyError:
-                artist = 'Unknown'
-            try:
-                title = result.value()['title']
-            except KeyError:
-                title = 'Unknown (%s)' % result.value()['url']
-            self.add_entry(result.value()['id'], artist, title)
+        self.__xmms.playlist_list(cb=self.__xmms_cb_playlist_list)
+        self.__xmms.playlist_list_entries(cb=self.__xmms_cb_entry_list)
+        self.__xmms.broadcast_playlist_loaded(cb=self.__xmms_cb_playlist_loaded)
+        self.__xmms.broadcast_playlist_changed(cb=self.__xmms_cb_playlist_changed)
 
-        def entry_list(result):
+        self.connect('row-activated', self.__gtk_cb_row_activated, None)
+
+
+    def __xmms_cb_id_info(self, result):
+        try:
+            artist = result.value()['artist']
+        except KeyError:
+            artist = 'Unknown'
+        try:
+            title = result.value()['title']
+        except KeyError:
+            title = 'Unknown (%s)' % result.value()['url']
+        self.add_entry(result.value()['id'], artist, title)
+
+
+    def __xmms_cb_entry_list(self, result):
+        self.list_store.clear()
+        for id in result.value():
+            self.__xmms.medialib_get_info(id, cb=self.__xmms_cb_id_info)
+        self.__xmms.playlist_current_pos(cb=self.__xmms_cb_current_pos)
+        self.__xmms.broadcast_playlist_current_pos(cb=self.__xmms_cb_current_pos)
+        self.__xmms.playback_status(cb=self.__xmms_cb_playback_status)
+        self.__xmms.broadcast_playback_status(cb=self.__xmms_cb_playback_status)
+
+
+    def __xmms_cb_current_pos(self, result):
+        self.__playlist_pos = result.value()
+        self.set_active(result.value())
+
+
+    def __xmms_cb_playlist_loaded(self, result):
+        self.__xmms.playlist_list_entries(cb=self.__xmms_cb_entry_list)
+
+
+    def __xmms_cb_playlist_changed(self, result):
+        res = result.value()
+        if res['type'] == xmmsclient.PLAYLIST_CHANGED_ADD:
+            self.__xmms.medialib_get_info(res['id'], cb=self.__xmms_cb_id_info)
+        elif res['type'] == xmmsclient.PLAYLIST_CHANGED_INSERT:
+            # FIXME: How do we remember the playlist position upon getting
+            #        the media info?
+            pass
+        elif res['type'] == xmmsclient.PLAYLIST_CHANGED_REMOVE:
+            self.remove_entry(res['position'])
+        elif res['type'] == xmmsclient.PLAYLIST_CHANGED_CLEAR:
             self.list_store.clear()
-            for id in result.value():
-                self.__xmms.medialib_get_info(id, cb=id_info)
-            self.__xmms.playlist_current_pos(cb=current_pos)
-            self.__xmms.broadcast_playlist_current_pos(cb=current_pos)
-            self.__xmms.playback_status(cb=playback_status)
-            self.__xmms.broadcast_playback_status(cb=playback_status)
+        elif res['type'] == xmmsclient.PLAYLIST_CHANGED_MOVE:
+            # FIXME: Let's see
+            pass
+        elif res['type'] == xmmsclient.PLAYLIST_CHANGED_SORT:
+            self.__xmms.playlist_list_entries(cb=self.__xmms_cb_entry_list)
+        elif res['type'] == xmmsclient.PLAYLIST_CHANGED_SHUFFLE:
+            self.__xmms.playlist_list_entries(cb=self.__xmms_cb_entry_list)
 
-        def current_pos(result):
-            self.__playlist_pos = result.value()
-            self.set_active(result.value())
 
-        def playlist_loaded(result):
-            self.__xmms.playlist_list_entries(cb=entry_list)
+    def __xmms_cb_playback_status(self, result):
+        status = result.value()
+        if status == xmmsclient.PLAYBACK_STATUS_PAUSE:
+            self.__status = gtk.STOCK_MEDIA_PAUSE
+        elif status == xmmsclient.PLAYBACK_STATUS_PLAY:
+            self.__status = gtk.STOCK_MEDIA_PLAY
+        elif status == xmmsclient.PLAYBACK_STATUS_STOP:
+            self.__status = gtk.STOCK_MEDIA_STOP
+        self.set_active(self.__playlist_pos)
 
-        def playlist_changed(result):
-            res = result.value()
-            if res['type'] == xmmsclient.PLAYLIST_CHANGED_ADD:
-                self.__xmms.medialib_get_info(res['id'], cb=id_info)
-            elif res['type'] == xmmsclient.PLAYLIST_CHANGED_INSERT:
-                # FIXME: How do we remember the playlist position upon getting
-                #        the media info?
-                pass
-            elif res['type'] == xmmsclient.PLAYLIST_CHANGED_REMOVE:
-                self.remove_entry(res['position'])
-            elif res['type'] == xmmsclient.PLAYLIST_CHANGED_CLEAR:
-                self.list_store.clear()
-            elif res['type'] == xmmsclient.PLAYLIST_CHANGED_MOVE:
-                # FIXME: Let's see
-                pass
-            elif res['type'] == xmmsclient.PLAYLIST_CHANGED_SORT:
-                self.__xmms.playlist_list_entries(cb=entry_list)
-            elif res['type'] == xmmsclient.PLAYLIST_CHANGED_SHUFFLE:
-                self.__xmms.playlist_list_entries(cb=entry_list)
 
-        def playback_status(result):
-            status = result.value()
-            if status == xmmsclient.PLAYBACK_STATUS_PAUSE:
-                self.__status = gtk.STOCK_MEDIA_PAUSE
-            elif status == xmmsclient.PLAYBACK_STATUS_PLAY:
-                self.__status = gtk.STOCK_MEDIA_PLAY
-            elif status == xmmsclient.PLAYBACK_STATUS_STOP:
-                self.__status = gtk.STOCK_MEDIA_STOP
-            self.set_active(self.__playlist_pos)
+    def __xmms_cb_playlist_list(self, result):
+        for playlist in result.value():
+            if playlist == '_album':
+                return
+        self.__xmms.playlist_create('_album')
 
-        def playlist_list(result):
-            for playlist in result.value():
-                if playlist == '_album':
-                    return
-            self.__xmms.playlist_create('_album')
 
-        self.__xmms.playlist_list(cb=playlist_list)
-        self.__xmms.playlist_list_entries(cb=entry_list)
-        self.__xmms.broadcast_playlist_loaded(cb=playlist_loaded)
-        self.__xmms.broadcast_playlist_changed(cb=playlist_changed)
-
-        def row_activated(treeview, path, column, user_data):
-            self.__xmms.playlist_set_next(path[0])
-            self.__xmms.playback_start()
-            self.__xmms.playback_tickle()
-
-        self.connect('row-activated', row_activated, None)
+    def __gtk_cb_row_activated(self, treeview, path, column, user_data):
+        self.__xmms.playlist_set_next(path[0])
+        self.__xmms.playback_start()
+        self.__xmms.playback_tickle()
 
 
     def add_entry(self, id, artist, title):
