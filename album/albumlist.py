@@ -138,6 +138,9 @@ class AlbumList(gtk.TreeView):
         Adds an Album to the list
         """
 
+        if not album:
+            return
+
         if not album.name:
             name = 'Unknown'
         else:
@@ -174,9 +177,13 @@ class AlbumList(gtk.TreeView):
 
 
     def filter(self, string):
-        coll_artist = xc.Match(field='artist', value=string)
-        coll_album = xc.Match(field='album', value=string)
-        coll_title = xc.Match(field='title', value=string)
-        self.__xmms.coll_query_infos(xc.Union(coll_artist, coll_album, coll_title),
+        if not string:
+            coll = xc.Universe()
+        else:
+            coll_artist = xc.Match(field='artist', value=string)
+            coll_album = xc.Match(field='album', value=string)
+            coll_title = xc.Match(field='title', value=string)
+            coll = xc.Union(coll_artist, coll_album, coll_title)
+        self.__xmms.coll_query_infos(coll,
                 ['id', 'album', 'artist', 'duration', 'picture_front'],
                 cb=self.__xmms_cb_song_list)
