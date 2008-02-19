@@ -104,6 +104,11 @@ class AlbumList(gtk.TreeView):
 
     def __gtk_cb_selection_changed(self, selection, user_data):
        (model, rows) = selection.get_selected_rows()
+
+       if not rows:
+           # FIXME: What should we do?
+           return
+
        colls = []
        for path in rows:
            iter = self.list_store.get_iter(path)
@@ -125,6 +130,7 @@ class AlbumList(gtk.TreeView):
                colls.append(xc.Intersection(
                    xc.Equals(field='artist', value=artist),
                    xc.Equals(field='album', value=album)))
+
        coll = xc.Union(*colls)
        self.__xmms.coll_query_ids(coll, cb=self.__xmms_cb_id_list)
 
