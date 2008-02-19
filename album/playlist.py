@@ -73,6 +73,12 @@ class PlayList(gtk.TreeView):
         self.__xmms.broadcast_playlist_loaded(cb=playlist_loaded)
         self.__xmms.broadcast_playlist_changed(cb=playlist_changed)
 
+        def row_activated(treeview, path, column, user_data):
+            self.__xmms.playlist_set_next(path[0])
+            self.__xmms.playback_tickle()
+
+        self.connect('row-activated', row_activated, None)
+
 
     def add_entry(self, id, artist, title):
         # FIXME: Escape album name, etc.
