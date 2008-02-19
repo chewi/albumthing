@@ -12,10 +12,11 @@ class PlayList(gtk.TreeView):
 
         self.set_headers_visible(False)
 
-        self.list_store = gtk.ListStore(gtk.gdk.Pixbuf,
+        self.list_store = gtk.ListStore(gobject.TYPE_STRING,
                 gobject.TYPE_STRING, gobject.TYPE_INT)
 
         self.pixbuf_renderer = gtk.CellRendererPixbuf()
+        self.pixbuf_renderer.set_fixed_size(-1, 32)
         self.text_renderer = gtk.CellRendererText()
 
         self.status_column = gtk.TreeViewColumn('status')
@@ -37,14 +38,26 @@ class PlayList(gtk.TreeView):
         def entry_list(result):
             for id in result.value():
                 self.__xmms.medialib_get_info(id, cb=id_info)
+            self.__xmms.playlist_current_pos(cb=current_pos)
+            self.__xmms.broadcast_playlist_current_pos(cb=current_pos)
 
         def current_pos(result):
-            print '\n\n\n\n\n' + result.value() + '\n\n\n\n\n'
+            self.set_active(result.value())
 
         self.__xmms.playlist_list_entries(cb=entry_list)
-        self.__xmms.broadcast_playlist_current_pos(cb=current_pos)
 
 
     def add_entry(self, id, artist, title):
         # FIXME: Escape album name, etc.
         self.list_store.append([None, '<b>%s</b>\n%s' % (title, artist), id])
+
+
+    def set_active(self, id):
+        i = 0
+        iter = self.list_store.get_iter_first()
+        while iter:
+            if id == i:
+                self.list_store.set_value(iter, 0, gtk.STOCK_MEDIA_PLAY)
+                break
+            i = i + 1
+            iter = self.list_store.iter_next(iter)
