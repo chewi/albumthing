@@ -21,7 +21,8 @@ class AlbumList(gtk.TreeView):
         self.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
 
         self.list_store = gtk.ListStore(gtk.gdk.Pixbuf,
-                gobject.TYPE_STRING, gobject.TYPE_INT)
+                gobject.TYPE_STRING, gobject.TYPE_INT,
+                gobject.TYPE_STRING, gobject.TYPE_STRING)
 
         self.pixbuf_renderer = gtk.CellRendererPixbuf()
         self.pixbuf_renderer.set_fixed_size(-1, COVER_SIZE + 4)
@@ -64,6 +65,40 @@ class AlbumList(gtk.TreeView):
                 ['id', 'album', 'artist', 'duration', 'picture_front'],
                 cb=song_list)
 
+        def id_list(result):
+            self.__xmms.playlist_clear('_album')
+            for id in result.value():
+                self.__xmms.playlist_add_id(id, '_album')
+            self.__xmms.playlist_load('_album')
+
+        def selection_changed(selection, user_data):
+           (model, rows) = selection.get_selected_rows()
+           colls = []
+           for path in rows:
+               iter = self.list_store.get_iter(path)
+               artist = self.list_store.get_value(iter, 3)
+               album = self.list_store.get_value(iter, 4)
+               if not artist and not album:
+                   colls.append(xc.Intersection(
+                       xc.Complement(xc.Has(xc.Universe(), 'artist')),
+                       xc.Complement(xc.Has(xc.Universe(), 'album'))))
+               elif not artist:
+                   colls.append(xc.Intersection(
+                       xc.Complement(xc.Has(xc.Universe(), 'artist')),
+                       xc.Equals(field='album', value=album)))
+               elif not album:
+                   colls.append(xc.Intersection(
+                       xc.Complement(xc.Has(xc.Universe(), 'album')),
+                       xc.Equals(field='artist', value=artist)))
+               else:
+                   colls.append(xc.Intersection(
+                       xc.Equals(field='artist', value=artist),
+                       xc.Equals(field='album', value=album)))
+           coll = xc.Union(*colls)
+           self.__xmms.coll_query_ids(coll, cb=id_list)
+
+        self.get_selection().connect('changed', selection_changed, None)
+
 
     def __increase_ids(self):
         self.__ids = self.__ids + 1
@@ -75,7 +110,11 @@ class AlbumList(gtk.TreeView):
         """
 
         # FIXME: Escape album name, etc.
-        self.list_store.append([None, '<b>%s</b>\n%s <small>- %d Tracks/%d:%02d Minutes</small>' % (album.name, album.artist, album.size, album.get_duration_min(), album.get_duration_sec()), self.__ids])
+        self.list_store.append([None,
+            '<b>%s</b>\n%s <small>- %d Tracks/%d:%02d Minutes</small>' %
+            (album.name, album.artist, album.size, album.get_duration_min(),
+                album.get_duration_sec()),
+            self.__ids, album.artist, album.name])
 
         album.set_id(self.__ids)
         self.__increase_ids()

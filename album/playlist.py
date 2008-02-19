@@ -35,8 +35,15 @@ class PlayList(gtk.TreeView):
         self.set_model(self.list_store)
 
         def id_info(result):
-            self.add_entry(result.value()['id'], result.value()['artist'],
-                    result.value()['title'])
+            try:
+                artist = result.value()['artist']
+            except KeyError:
+                artist = 'Unknown'
+            try:
+                title = result.value()['title']
+            except KeyError:
+                title = 'Unknown (%s)' % result.value()['url']
+            self.add_entry(result.value()['id'], artist, title)
 
         def entry_list(result):
             self.list_store.clear()
@@ -83,6 +90,8 @@ class PlayList(gtk.TreeView):
             elif status == xmmsclient.PLAYBACK_STATUS_STOP:
                 self.__status = gtk.STOCK_MEDIA_STOP
             self.set_active(self.__playlist_pos)
+
+        self.__xmms.playlist_create('_album')
 
         self.__xmms.playlist_list_entries(cb=entry_list)
         self.__xmms.broadcast_playlist_loaded(cb=playlist_loaded)
