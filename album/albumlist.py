@@ -42,12 +42,14 @@ class AlbumList(gtk.TreeView):
 
         def song_list(result):
             duration = 0
-            last = None
+            last_album = None
+            last_artist = None
             album = None
             songs = result.value()
-            songs.sort(key=operator.itemgetter('album'))
+            songs.sort(key=operator.itemgetter('album', 'artist'))
             for song in songs:
-                if last and last == song['album']:
+                if album and last_album == song['album'] and \
+                        last_artist == song['artist']:
                     album.increase_size()
                     album.add_duration(song['duration'])
                 else:
@@ -57,7 +59,8 @@ class AlbumList(gtk.TreeView):
                             song['artist'], song['picture_front'], 1,
                             song['duration'])
 
-                last = song['album']
+                last_album = song['album']
+                last_artist = song['artist']
 
             self.add_album(album)
 
