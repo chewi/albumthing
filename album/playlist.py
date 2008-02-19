@@ -2,6 +2,7 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 import gobject
+import xmmsclient
 
 
 class PlayList(gtk.TreeView):
@@ -48,8 +49,29 @@ class PlayList(gtk.TreeView):
         def playlist_loaded(result):
             self.__xmms.playlist_list_entries(cb=entry_list)
 
+        def playlist_changed(result):
+            res = result.value()
+            if res['type'] == xmmsclient.PLAYLIST_CHANGED_ADD:
+                self.__xmms.medialib_get_info(res['id'], cb=id_info)
+            elif res['type'] == xmmsclient.PLAYLIST_CHANGED_INSERT:
+                # FIXME: How do we remember the playlist position upon getting
+                #        the media info?
+                pass
+            elif res['type'] == xmmsclient.PLAYLIST_CHANGED_REMOVE:
+                self.remove_entry(res['position'])
+            elif res['type'] == xmmsclient.PLAYLIST_CHANGED_CLEAR:
+                self.list_store.clear()
+            elif res['type'] == xmmsclient.PLAYLIST_CHANGED_MOVE:
+                # FIXME: Let's see
+                pass
+            elif res['type'] == xmmsclient.PLAYLIST_CHANGED_SORT:
+                self.__xmms.playlist_list_entries(cb=entry_list)
+            elif res['type'] == xmmsclient.PLAYLIST_CHANGED_SHUFFLE:
+                self.__xmms.playlist_list_entries(cb=entry_list)
+
         self.__xmms.playlist_list_entries(cb=entry_list)
         self.__xmms.broadcast_playlist_loaded(cb=playlist_loaded)
+        self.__xmms.broadcast_playlist_changed(cb=playlist_changed)
 
 
     def add_entry(self, id, artist, title):
@@ -57,12 +79,23 @@ class PlayList(gtk.TreeView):
         self.list_store.append([None, '<b>%s</b>\n%s' % (title, artist), id])
 
 
-    def set_active(self, id):
+    def remove_entry(self, pos):
+        i = 0
+        iter = self.list_store.get_iter_first()
+        while iter:
+            if pos == i:
+                self.list_store.remove(iter)
+                break
+            i = i + 1
+            iter = self.list_store.iter_next(iter)
+
+
+    def set_active(self, pos):
         i = 0
         iter = self.list_store.get_iter_first()
         while iter:
             self.list_store.set_value(iter, 0, None)
-            if id == i:
+            if pos == i:
                 self.list_store.set_value(iter, 0, gtk.STOCK_MEDIA_PLAY)
             i = i + 1
             iter = self.list_store.iter_next(iter)
