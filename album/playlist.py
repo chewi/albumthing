@@ -92,8 +92,13 @@ class PlayList(gtk.TreeView):
                 self.__status = gtk.STOCK_MEDIA_STOP
             self.set_active(self.__playlist_pos)
 
-        self.__xmms.playlist_create('_album')
+        def playlist_list(result):
+            for playlist in result.value():
+                if playlist == '_album':
+                    return
+            self.__xmms.playlist_create('_album')
 
+        self.__xmms.playlist_list(cb=playlist_list)
         self.__xmms.playlist_list_entries(cb=entry_list)
         self.__xmms.broadcast_playlist_loaded(cb=playlist_loaded)
         self.__xmms.broadcast_playlist_changed(cb=playlist_changed)
