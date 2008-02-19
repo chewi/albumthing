@@ -2,6 +2,7 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 import gobject
+from gobject import markup_escape_text
 import xmmsclient
 
 
@@ -106,8 +107,8 @@ class PlayList(gtk.TreeView):
 
 
     def add_entry(self, id, artist, title):
-        # FIXME: Escape album name, etc.
-        self.list_store.append([None, '<b>%s</b>\n%s' % (title, artist), id])
+        self.list_store.append([None, '<b>%s</b>\n%s' %
+            (markup_escape_text(title), markup_escape_text(artist)), id])
 
 
     def remove_entry(self, pos):

@@ -2,6 +2,7 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 import gobject
+from gobject import markup_escape_text
 from xmmsclient import collections as xc
 import operator
 from album import Album
@@ -112,11 +113,20 @@ class AlbumList(gtk.TreeView):
         Adds an Album to the list
         """
 
-        # FIXME: Escape album name, etc.
+        if not album.name:
+            name = 'Unknown'
+        else:
+            name = album.name
+
+        if not album.artist:
+            artist = 'Unknown'
+        else:
+            artist = album.artist
+
         self.list_store.append([None,
             '<b>%s</b>\n%s <small>- %d Tracks/%d:%02d Minutes</small>' %
-            (album.name, album.artist, album.size, album.get_duration_min(),
-                album.get_duration_sec()),
+            (markup_escape_text(name), markup_escape_text(artist),
+                album.size, album.get_duration_min(), album.get_duration_sec()),
             self.__ids, album.artist, album.name])
 
         album.set_id(self.__ids)
