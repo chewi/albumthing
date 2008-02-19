@@ -18,6 +18,7 @@ class AlbumList(gtk.TreeView):
         self.__ids = 0
 
         self.set_headers_visible(False)
+        self.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
 
         self.list_store = gtk.ListStore(gtk.gdk.Pixbuf,
                 gobject.TYPE_STRING, gobject.TYPE_INT)

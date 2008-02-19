@@ -10,6 +10,8 @@ class PlayList(gtk.TreeView):
         super(PlayList, self).__init__()
 
         self.__xmms = xmms
+        self.__status = gtk.STOCK_MEDIA_STOP
+        self.__playlist_pos = 0
 
         self.set_headers_visible(False)
 
@@ -42,8 +44,11 @@ class PlayList(gtk.TreeView):
                 self.__xmms.medialib_get_info(id, cb=id_info)
             self.__xmms.playlist_current_pos(cb=current_pos)
             self.__xmms.broadcast_playlist_current_pos(cb=current_pos)
+            self.__xmms.playback_status(cb=playback_status)
+            self.__xmms.broadcast_playback_status(cb=playback_status)
 
         def current_pos(result):
+            self.__playlist_pos = result.value()
             self.set_active(result.value())
 
         def playlist_loaded(result):
@@ -68,6 +73,16 @@ class PlayList(gtk.TreeView):
                 self.__xmms.playlist_list_entries(cb=entry_list)
             elif res['type'] == xmmsclient.PLAYLIST_CHANGED_SHUFFLE:
                 self.__xmms.playlist_list_entries(cb=entry_list)
+
+        def playback_status(result):
+            status = result.value()
+            if status == xmmsclient.PLAYBACK_STATUS_PAUSE:
+                self.__status = gtk.STOCK_MEDIA_PAUSE
+            elif status == xmmsclient.PLAYBACK_STATUS_PLAY:
+                self.__status = gtk.STOCK_MEDIA_PLAY
+            elif status == xmmsclient.PLAYBACK_STATUS_STOP:
+                self.__status = gtk.STOCK_MEDIA_STOP
+            self.set_active(self.__playlist_pos)
 
         self.__xmms.playlist_list_entries(cb=entry_list)
         self.__xmms.broadcast_playlist_loaded(cb=playlist_loaded)
@@ -102,6 +117,6 @@ class PlayList(gtk.TreeView):
         while iter:
             self.list_store.set_value(iter, 0, None)
             if pos == i:
-                self.list_store.set_value(iter, 0, gtk.STOCK_MEDIA_PLAY)
+                self.list_store.set_value(iter, 0, self.__status)
             i = i + 1
             iter = self.list_store.iter_next(iter)
