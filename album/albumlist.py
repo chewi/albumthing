@@ -11,6 +11,27 @@ from album import Album
 COVER_SIZE = 40
 
 
+class AlbumListThing(gtk.VBox):
+    def __init__(self, xmms):
+        super(AlbumListThing, self).__init__(homogeneous=False, spacing=4)
+
+        self.filter_entry = gtk.Entry()
+        self.pack_start(self.filter_entry, expand=False)
+
+        self.album_list = AlbumList(xmms)
+
+        scrolled_album = gtk.ScrolledWindow()
+        scrolled_album.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        scrolled_album.add(self.album_list)
+        self.pack_start(scrolled_album)
+
+        self.filter_entry.connect('changed', self.__gtk_cb_changed, None)
+
+
+    def __gtk_cb_changed(self, editable, user_data):
+        self.album_list.filter(self.filter_entry.get_text())
+
+
 class AlbumList(gtk.TreeView):
     def __init__(self, xmms):
         super(AlbumList, self).__init__()

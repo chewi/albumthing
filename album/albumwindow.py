@@ -14,21 +14,17 @@ class AlbumWindow(gtk.Window):
 
         self.xmms = xmms
 
-        self.album_list = albumlist.AlbumList(self.xmms)
+        self.album_list = albumlist.AlbumListThing(self.xmms)
         self.play_list = playlist.PlayList(self.xmms)
         self.vbox = gtk.VBox(homogeneous=False, spacing=4)
 
         self.hpaned = gtk.HPaned()
 
-        scrolled_album = gtk.ScrolledWindow()
-        scrolled_album.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        scrolled_album.add(self.album_list)
-
         scrolled_playlist = gtk.ScrolledWindow()
         scrolled_playlist.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         scrolled_playlist.add(self.play_list)
 
-        self.hpaned.add1(scrolled_album)
+        self.hpaned.add1(self.album_list)
         self.hpaned.add2(scrolled_playlist)
 
         self.vbox.pack_start(menu.MenuBar(), expand=False)
