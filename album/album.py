@@ -9,12 +9,14 @@ class Album:
             duration=0):
         self.__album_list = albumlist
         def __bindata_retrieve(result):
-            buf = result.get_bin()
-            self.__pixbuf_loader.write(buf)
-            self.__pixbuf_loader.close()
-            if self.__id > -1:
-                albumlist.set_cover(self.__id,
-                        self.__pixbuf_loader.get_pixbuf())
+            try:
+                self.__pixbuf_loader.write(result.value())
+                self.__pixbuf_loader.close()
+                if self.__id > -1:
+                    albumlist.set_cover(self.__id,
+                            self.__pixbuf_loader.get_pixbuf())
+            except:
+                pass
 
         self.__xmms = xmms
         self.__pixbuf_loader = gtk.gdk.PixbufLoader()
