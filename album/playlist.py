@@ -90,6 +90,7 @@ class PlayList(gtk.TreeView):
 
         def row_activated(treeview, path, column, user_data):
             self.__xmms.playlist_set_next(path[0])
+            self.__xmms.playback_start()
             self.__xmms.playback_tickle()
 
         self.connect('row-activated', row_activated, None)
