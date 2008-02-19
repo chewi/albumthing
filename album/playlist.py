@@ -36,6 +36,7 @@ class PlayList(gtk.TreeView):
                     result.value()['title'])
 
         def entry_list(result):
+            self.list_store.clear()
             for id in result.value():
                 self.__xmms.medialib_get_info(id, cb=id_info)
             self.__xmms.playlist_current_pos(cb=current_pos)
@@ -44,7 +45,11 @@ class PlayList(gtk.TreeView):
         def current_pos(result):
             self.set_active(result.value())
 
+        def playlist_loaded(result):
+            self.__xmms.playlist_list_entries(cb=entry_list)
+
         self.__xmms.playlist_list_entries(cb=entry_list)
+        self.__xmms.broadcast_playlist_loaded(cb=playlist_loaded)
 
 
     def add_entry(self, id, artist, title):
