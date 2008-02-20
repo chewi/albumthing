@@ -33,6 +33,14 @@ class AlbumControls(gtk.VBox):
 
         self.pack_start(self.button_box, expand=False)
 
+        self.info_label = gtk.Label('<b>Foo</b>\nBar')
+        self.info_label.set_use_markup(True)
+
+        label_holder = gtk.HBox(homogeneous=False)
+        label_holder.pack_start(self.info_label, False, False)
+
+        self.pack_start(label_holder)
+
         self.play_pause_button.connect('toggled',
                 self.__gtk_cb_play_pause_toggled, None)
         self.prev_button.connect('clicked', self.__gtk_cb_prev_clicked, None)
@@ -40,6 +48,8 @@ class AlbumControls(gtk.VBox):
 
         self.__xmms.playback_status(cb=self.__xmms_cb_playback_status)
         self.__xmms.broadcast_playback_status(cb=self.__xmms_cb_playback_status)
+        self.__xmms.playback_current_id(cb=self.__xmms_cb_current_id)
+        self.__xmms.broadcast_playback_current_id(cb=self.__xmms_cb_current_id)
 
 
     def __xmms_cb_playback_status(self, result):
@@ -49,6 +59,22 @@ class AlbumControls(gtk.VBox):
             self.play_pause_button.set_active(False)
         elif status == xmmsclient.PLAYBACK_STATUS_PLAY:
             self.play_pause_button.set_active(True)
+
+
+    def __xmms_cb_id_info(self, result):
+        try:
+            artist = result.value()['artist']
+        except KeyError:
+            artist = 'Unknown'
+        try:
+            title = result.value()['title']
+        except KeyError:
+            title = 'Unknown (%s)' % result.value()['url']
+        self.info_label.set_markup('<b>%s</b>\n%s' % (title, artist))
+
+
+    def __xmms_cb_current_id(self, result):
+        self.__xmms.medialib_get_info(result.value(), cb=self.__xmms_cb_id_info)
 
 
     def __gtk_cb_play_pause_toggled(self, button, user_data):
