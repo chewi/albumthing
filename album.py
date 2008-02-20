@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+#
+# Copyright (c) 2008 Sebastian Sareyko <smoon at nooms dot de>
+# See COPYING file for details.
+
 
 import pygtk
 pygtk.require('2.0')
