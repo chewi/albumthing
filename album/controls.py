@@ -1,8 +1,60 @@
+from __future__ import division
 import pygtk
 pygtk.require('2.0')
 import gtk
 import gobject
 import xmmsclient
+
+
+class SeekBar(gtk.VBox):
+    def __init__(self, xmms):
+        super(SeekBar, self).__init__(homogeneous=False, spacing=4)
+
+        self.__xmms = xmms
+        self.__duration = 0
+
+        self.scale = gtk.HScale()
+        self.scale.set_draw_value(False)
+        self.scale.set_range(0, 1)
+        self.pack_start(self.scale)
+
+        self.time = gtk.Label('0:00')
+        self.pack_start(self.time)
+
+        self.scale.connect('change-value', self.__gtk_cb_change_value, None)
+
+        self.__xmms.playback_current_id(cb=self.__xmms_cb_current_id)
+        self.__xmms.broadcast_playback_current_id(cb=self.__xmms_cb_current_id)
+        gobject.timeout_add_seconds(1, self.__poll_playtime)
+
+
+    def __xmms_cb_id_info(self, result):
+        self.__duration = result.value()['duration']
+
+
+    def __xmms_cb_current_id(self, result):
+        self.__xmms.medialib_get_info(result.value(), cb=self.__xmms_cb_id_info)
+
+
+    def __xmms_cb_playback_playtime(self, result):
+        self.scale.set_value(result.value() / self.__duration)
+        self.time.set_text('%s / %s' % 
+                (self.__format_time(result.value()),
+                    self.__format_time(self.__duration)))
+
+
+    def __poll_playtime(self):
+        self.__xmms.playback_playtime(cb=self.__xmms_cb_playback_playtime)
+        return True
+
+
+    def __gtk_cb_change_value(self, range, scroll, value, user_data):
+        time = value * self.__duration
+        self.__xmms.playback_seek_ms(time)
+
+
+    def __format_time(self, time):
+        return '%d:%02d' % (int(time / 60000), int((time / 1000) % 60))
 
 
 class AlbumControls(gtk.VBox):
@@ -30,6 +82,9 @@ class AlbumControls(gtk.VBox):
         label = label.get_children()[0].get_children()[1]
         label.set_text('')
         self.button_box.pack_start (self.next_button, False, False)
+
+        self.seek_bar = SeekBar(self.__xmms)
+        self.button_box.pack_start(self.seek_bar, padding=4)
 
         self.pack_start(self.button_box, expand=False)
 
