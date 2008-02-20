@@ -17,7 +17,7 @@ class AlbumControls(gtk.VBox):
         self.play_pause_button.set_mode(False)
         self.play_pause_button.set_use_stock(True)
         self.play_pause_button.set_label(gtk.STOCK_MEDIA_PLAY)
-        self.button_box.pack_start (self.play_pause_button, False, False)
+        self.button_box.pack_start (self.play_pause_button, False, False, 4)
 
         self.prev_button = gtk.Button(stock=gtk.STOCK_MEDIA_PREVIOUS)
         label = self.prev_button.get_children()[0]
@@ -37,7 +37,7 @@ class AlbumControls(gtk.VBox):
         self.info_label.set_use_markup(True)
 
         label_holder = gtk.HBox(homogeneous=False)
-        label_holder.pack_start(self.info_label, False, False)
+        label_holder.pack_start(self.info_label, False, False, 4)
 
         self.pack_start(label_holder)
 

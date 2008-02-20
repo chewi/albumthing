@@ -18,12 +18,13 @@ class AlbumWindow(gtk.Window):
 
         self.album_list = albumlist.AlbumListThing(self.__xmms)
         self.play_list = playlist.PlayList(self.__xmms)
-        self.vbox = gtk.VBox(homogeneous=False, spacing=4)
+        self.vbox = gtk.VBox(homogeneous=False, spacing=8)
 
         self.hpaned = gtk.HPaned()
 
         scrolled_playlist = gtk.ScrolledWindow()
         scrolled_playlist.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        scrolled_playlist.set_shadow_type(gtk.SHADOW_IN)
         scrolled_playlist.add(self.play_list)
 
         self.hpaned.add1(self.album_list)

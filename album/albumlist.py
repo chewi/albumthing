@@ -22,6 +22,7 @@ class AlbumListThing(gtk.VBox):
 
         scrolled_album = gtk.ScrolledWindow()
         scrolled_album.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        scrolled_album.set_shadow_type(gtk.SHADOW_IN)
         scrolled_album.add(self.album_list)
         self.pack_start(scrolled_album)
 
