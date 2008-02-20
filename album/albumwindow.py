@@ -1,7 +1,7 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
-import menu, albumlist, playlist
+import menu, albumlist, playlist, controls
 
 
 class AlbumWindow(gtk.Window):
@@ -28,7 +28,7 @@ class AlbumWindow(gtk.Window):
         self.hpaned.add2(scrolled_playlist)
 
         self.vbox.pack_start(menu.MenuBar(), expand=False)
-        # FIXME: Add Controls, etc. here
+        self.vbox.pack_start(controls.AlbumControls(xmms), expand=False)
         self.vbox.pack_start(self.hpaned)
 
         self.add(self.vbox)
