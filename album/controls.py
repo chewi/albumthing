@@ -3,6 +3,7 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 import gobject
+from gobject import markup_escape_text
 import xmmsclient
 
 
@@ -125,7 +126,8 @@ class AlbumControls(gtk.VBox):
             title = result.value()['title']
         except KeyError:
             title = 'Unknown (%s)' % result.value()['url']
-        self.info_label.set_markup('<b>%s</b>\n%s' % (title, artist))
+        self.info_label.set_markup('<b>%s</b>\n%s' %
+                (markup_escape_text(title), markup_escape_text(artist)))
 
 
     def __xmms_cb_current_id(self, result):
