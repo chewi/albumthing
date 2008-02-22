@@ -57,7 +57,11 @@ class PlayList(gtk.TreeView):
             title = result.value()['title']
         except KeyError:
             title = 'Unknown (%s)' % result.value()['url']
-        self.add_entry(result.value()['id'], artist, title)
+        try:
+            album = result.value()['album']
+        except KeyError:
+            album = 'Unknown'
+        self.add_entry(result.value()['id'], artist, title, album)
 
 
     def __xmms_cb_entry_list(self, result):
@@ -125,9 +129,10 @@ class PlayList(gtk.TreeView):
         self.__xmms.playback_tickle()
 
 
-    def add_entry(self, id, artist, title):
-        self.list_store.append([None, '<b>%s</b>\n%s' %
-            (markup_escape_text(title), markup_escape_text(artist)), id])
+    def add_entry(self, id, artist, title, album):
+        self.list_store.append([None, '<b>%s</b>\n<small>by</small> %s <small>from</small> %s' %
+            (markup_escape_text(title), markup_escape_text(artist),
+            markup_escape_text(album)), id])
 
 
     def remove_entry(self, pos):
