@@ -16,7 +16,7 @@ class SeekBar(gtk.VBox):
         super(SeekBar, self).__init__(homogeneous=False, spacing=4)
 
         self.__xmms = xmms
-        self.__duration = 0
+        self.__duration = 1
 
         self.scale = gtk.HScale()
         self.scale.set_draw_value(False)
