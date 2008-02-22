@@ -130,8 +130,14 @@ class AlbumControls(gtk.VBox):
             title = result.value()['title']
         except KeyError:
             title = 'Unknown (%s)' % result.value()['url']
-        self.info_label.set_markup('<b>%s</b>\n%s' %
-                (markup_escape_text(title), markup_escape_text(artist)))
+        try:
+            album = result.value()['album']
+        except KeyError:
+            album = 'Unknown'
+        self.info_label.set_markup(
+                '<b>%s</b>\n<small>by</small> %s <small>from</small> %s' %
+                (markup_escape_text(title), markup_escape_text(artist),
+                    markup_escape_text(album)))
 
 
     def __xmms_cb_current_id(self, result):

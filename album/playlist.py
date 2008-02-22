@@ -130,9 +130,10 @@ class PlayList(gtk.TreeView):
 
 
     def add_entry(self, id, artist, title, album):
-        self.list_store.append([None, '<b>%s</b>\n<small>by</small> %s <small>from</small> %s' %
+        self.list_store.append([None,
+            '<b>%s</b>\n<small>by</small> %s <small>from</small> %s' %
             (markup_escape_text(title), markup_escape_text(artist),
-            markup_escape_text(album)), id])
+                markup_escape_text(album)), id])
 
 
     def remove_entry(self, pos):
