@@ -71,6 +71,7 @@ class AlbumList(gtk.TreeView):
         self.append_column(self.name_column)
 
         self.set_model(self.list_store)
+        self.set_search_column(4)
 
         self.__xmms.coll_query_infos(xc.Universe(),
                 ['id', 'album', 'artist', 'duration', 'picture_front'],

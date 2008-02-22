@@ -37,10 +37,6 @@ class PlayList(gtk.TreeView):
         self.name_column.add_attribute(self.text_renderer, 'markup', 1)
         self.append_column(self.name_column)
 
-        self.title_column = gtk.TreeViewColumn('name')
-        self.title_column.pack_start(self.text_renderer)
-        self.title_column.add_attribute(self.text_renderer, 'text', 3)
-
         self.set_model(self.list_store)
         self.set_search_column(3)
 
