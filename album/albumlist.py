@@ -76,7 +76,9 @@ class AlbumList(gtk.TreeView):
                 ['id', 'album', 'artist', 'duration', 'picture_front'],
                 cb=self.__xmms_cb_song_list)
 
-        self.get_selection().connect('changed', self.__gtk_cb_selection_changed, None)
+        self.connect('row-activated', self.__gtk_cb_row_activated, None)
+        self.get_selection().connect('changed',
+                self.__gtk_cb_selection_changed, None)
 
 
     def __xmms_cb_song_list(self, result):
@@ -143,6 +145,12 @@ class AlbumList(gtk.TreeView):
 
        coll = xc.Union(*colls)
        self.__xmms.coll_query_ids(coll, cb=self.__xmms_cb_id_list)
+
+
+    def __gtk_cb_row_activated(self, treeview, path, view_column, user_data):
+        self.__xmms.playlist_set_next(0)
+        self.__xmms.playback_tickle()
+        self.__xmms.playback_start()
 
 
     def __increase_ids(self):
