@@ -41,6 +41,8 @@ class AlbumWindow(gtk.Window):
         self.__xmms.playback_current_id(cb=self.__xmms_cb_current_id)
         self.__xmms.broadcast_playback_current_id(cb=self.__xmms_cb_current_id)
 
+        self.album_list.filter_grab_focus()
+
         self.add(self.vbox)
         self.connect('destroy', self.destroy)
         self.show_all()
