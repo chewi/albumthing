@@ -4,25 +4,14 @@
 # See COPYING file for details.
 
 
-import pygtk
-pygtk.require('2.0')
+from album.albumthing import AlbumThing
 import gtk
-import xmmsclient
-from xmmsclient import glib as xmmsglib
-import sys
-import os
 from album import albumwindow
 
 
+
 if __name__ == '__main__':
-    xmms = xmmsclient.XMMS('album')
-    try:
-        xmms.connect(os.getenv('XMMS_PATH'))
-    except IOError, detail:
-        print 'Connection failed: %s' % detail
-        sys.exit(1)
+    AlbumThing()
 
-    conn = xmmsglib.GLibConnector(xmms)
-
-    win = albumwindow.AlbumWindow(xmms)
+    win = albumwindow.AlbumWindow()
     gtk.main()

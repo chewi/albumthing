@@ -6,14 +6,16 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 import gobject
+from albumthing import AlbumThing
 
 
 class Album:
-    def __init__(self, albumlist, xmms, name, artist, picture_front, size=0,
+    def __init__(self, albumlist, name, artist, picture_front, size=0,
             duration=0):
+        self.__at = AlbumThing ()
+
         self.__album_list = albumlist
 
-        self.__xmms = xmms
         self.__pixbuf_loader = gtk.gdk.PixbufLoader()
         self.__id = -1
         self.name = name
@@ -23,7 +25,8 @@ class Album:
         self.picture_front = picture_front
 
         if picture_front:
-            xmms.bindata_retrieve(picture_front, cb=self.__xmms_cb_bindata_retrieve)
+            self.__at.xmms.bindata_retrieve(picture_front,
+                    cb=self.__xmms_cb_bindata_retrieve)
 
 
     def __xmms_cb_bindata_retrieve(self, result):

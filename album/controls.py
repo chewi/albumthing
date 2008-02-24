@@ -9,13 +9,14 @@ import gtk
 import gobject
 from gobject import markup_escape_text
 import xmmsclient
+from albumthing import AlbumThing
 
 
 class SeekBar(gtk.VBox):
-    def __init__(self, xmms):
+    def __init__(self):
         super(SeekBar, self).__init__(homogeneous=False, spacing=4)
 
-        self.__xmms = xmms
+        self.__at = AlbumThing ()
         self.__duration = 0
 
         self.scale = gtk.HScale()
@@ -28,8 +29,9 @@ class SeekBar(gtk.VBox):
 
         self.scale.connect('change-value', self.__gtk_cb_change_value, None)
 
-        self.__xmms.playback_current_id(cb=self.__xmms_cb_current_id)
-        self.__xmms.broadcast_playback_current_id(cb=self.__xmms_cb_current_id)
+        if self.__at.connected:
+            self.setup_callbacks()
+
         gobject.timeout_add_seconds(1, self.__poll_playtime)
 
 
@@ -40,7 +42,8 @@ class SeekBar(gtk.VBox):
 
 
     def __xmms_cb_current_id(self, result):
-        self.__xmms.medialib_get_info(result.value(), cb=self.__xmms_cb_id_info)
+        self.__at.xmms.medialib_get_info(result.value(),
+                cb=self.__xmms_cb_id_info)
 
 
     def __xmms_cb_playback_playtime(self, result):
@@ -56,24 +59,32 @@ class SeekBar(gtk.VBox):
 
 
     def __poll_playtime(self):
-        self.__xmms.playback_playtime(cb=self.__xmms_cb_playback_playtime)
+        if self.__at.connected:
+            self.__at.xmms.playback_playtime(
+                    cb=self.__xmms_cb_playback_playtime)
         return True
 
 
     def __gtk_cb_change_value(self, range, scroll, value, user_data):
         time = value * self.__duration
-        self.__xmms.playback_seek_ms(time)
+        self.__at.xmms.playback_seek_ms(time)
 
 
     def __format_time(self, time):
         return '%d:%02d' % (int(time / 60000), int((time / 1000) % 60))
 
 
+    def setup_callbacks(self):
+        self.__at.xmms.playback_current_id(cb=self.__xmms_cb_current_id)
+        self.__at.xmms.broadcast_playback_current_id(
+                cb=self.__xmms_cb_current_id)
+
+
 class AlbumControls(gtk.VBox):
-    def __init__(self, xmms):
+    def __init__(self):
         super(AlbumControls, self).__init__(homogeneous=False, spacing=4)
 
-        self.__xmms = xmms
+        self.__at = AlbumThing ()
 
         self.button_box = gtk.HBox(homogeneous=False, spacing=4)
 
@@ -95,7 +106,7 @@ class AlbumControls(gtk.VBox):
         label.set_text('')
         self.button_box.pack_start (self.next_button, False, False)
 
-        self.seek_bar = SeekBar(self.__xmms)
+        self.seek_bar = SeekBar()
         self.button_box.pack_start(self.seek_bar, padding=4)
 
         self.pack_start(self.button_box, expand=False)
@@ -113,10 +124,8 @@ class AlbumControls(gtk.VBox):
         self.prev_button.connect('clicked', self.__gtk_cb_prev_clicked, None)
         self.next_button.connect('clicked', self.__gtk_cb_next_clicked, None)
 
-        self.__xmms.playback_status(cb=self.__xmms_cb_playback_status)
-        self.__xmms.broadcast_playback_status(cb=self.__xmms_cb_playback_status)
-        self.__xmms.playback_current_id(cb=self.__xmms_cb_current_id)
-        self.__xmms.broadcast_playback_current_id(cb=self.__xmms_cb_current_id)
+        if self.__at.connected:
+            self.setup_callbacks()
 
 
     def __xmms_cb_playback_status(self, result):
@@ -151,21 +160,32 @@ class AlbumControls(gtk.VBox):
 
 
     def __xmms_cb_current_id(self, result):
-        self.__xmms.medialib_get_info(result.value(), cb=self.__xmms_cb_id_info)
+        self.__at.xmms.medialib_get_info(result.value(),
+                cb=self.__xmms_cb_id_info)
 
 
     def __gtk_cb_play_pause_toggled(self, button, user_data):
         if self.play_pause_button.get_active():
-            self.__xmms.playback_start()
+            self.__at.xmms.playback_start()
         else:
-            self.__xmms.playback_pause()
+            self.__at.xmms.playback_pause()
 
 
     def __gtk_cb_prev_clicked(self, button, user_data):
-        self.__xmms.playlist_set_next_rel(-1)
-        self.__xmms.playback_tickle()
+        self.__at.xmms.playlist_set_next_rel(-1)
+        self.__at.xmms.playback_tickle()
 
 
     def __gtk_cb_next_clicked(self, button, user_data):
-        self.__xmms.playlist_set_next_rel(1)
-        self.__xmms.playback_tickle()
+        self.__at.xmms.playlist_set_next_rel(1)
+        self.__at.xmms.playback_tickle()
+
+
+    def setup_callbacks(self):
+        self.__at.xmms.playback_status(cb=self.__xmms_cb_playback_status)
+        self.__at.xmms.broadcast_playback_status(
+                cb=self.__xmms_cb_playback_status)
+        self.__at.xmms.playback_current_id(cb=self.__xmms_cb_current_id)
+        self.__at.xmms.broadcast_playback_current_id(
+                cb=self.__xmms_cb_current_id)
+        self.seek_bar.setup_callbacks()

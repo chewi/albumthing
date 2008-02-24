@@ -10,20 +10,21 @@ from gobject import markup_escape_text
 from xmmsclient import collections as xc
 import operator
 from album import Album
+from albumthing import AlbumThing
 
 
 COVER_SIZE = 40
 
 
 class AlbumListThing(gtk.VBox):
-    def __init__(self, xmms):
+    def __init__(self):
         super(AlbumListThing, self).__init__(homogeneous=False, spacing=4)
 
         self.filter_entry = gtk.Entry()
         self.filter_entry.grab_focus()
         self.pack_start(self.filter_entry, expand=False)
 
-        self.album_list = AlbumList(xmms)
+        self.album_list = AlbumList()
 
         scrolled_album = gtk.ScrolledWindow()
         scrolled_album.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
@@ -42,12 +43,16 @@ class AlbumListThing(gtk.VBox):
         self.filter_entry.grab_focus()
 
 
+    def setup_callbacks(self):
+        self.album_list.setup_callbacks()
+
+
 class AlbumList(gtk.TreeView):
-    def __init__(self, xmms):
+    def __init__(self):
         super(AlbumList, self).__init__()
 
-        self.__xmms = xmms
         self.__ids = 0
+        self.__at = AlbumThing ()
 
         self.set_headers_visible(False)
         self.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
@@ -73,9 +78,8 @@ class AlbumList(gtk.TreeView):
         self.set_model(self.list_store)
         self.set_search_column(4)
 
-        self.__xmms.coll_query_infos(xc.Universe(),
-                ['id', 'album', 'artist', 'duration', 'picture_front'],
-                cb=self.__xmms_cb_song_list)
+        if self.__at.connected:
+            self.setup_callbacks()
 
         self.get_selection().connect('changed',
                 self.__gtk_cb_selection_changed, None)
@@ -97,7 +101,7 @@ class AlbumList(gtk.TreeView):
             else:
                 if album:
                     self.add_album(album)
-                album = Album(self, self.__xmms, song['album'],
+                album = Album(self, song['album'],
                         song['artist'], song['picture_front'], 1,
                         song['duration'])
 
@@ -137,9 +141,9 @@ class AlbumList(gtk.TreeView):
                    xc.Equals(field='album', value=album)))
 
        coll = xc.Union(*colls)
-       self.__xmms.playlist_clear('_album')
-       self.__xmms.playlist_add_collection(coll, playlist='_album')
-       self.__xmms.playlist_load('_album')
+       self.__at.xmms.playlist_clear('_album')
+       self.__at.xmms.playlist_add_collection(coll, playlist='_album')
+       self.__at.xmms.playlist_load('_album')
 
 
     def __increase_ids(self):
@@ -197,6 +201,12 @@ class AlbumList(gtk.TreeView):
             coll_album = xc.Match(field='album', value=string)
             coll_title = xc.Match(field='title', value=string)
             coll = xc.Union(coll_artist, coll_album, coll_title)
-        self.__xmms.coll_query_infos(coll,
+        self.__at.xmms.coll_query_infos(coll,
+                ['id', 'album', 'artist', 'duration', 'picture_front'],
+                cb=self.__xmms_cb_song_list)
+
+
+    def setup_callbacks(self):
+        self.__at.xmms.coll_query_infos(xc.Universe(),
                 ['id', 'album', 'artist', 'duration', 'picture_front'],
                 cb=self.__xmms_cb_song_list)
