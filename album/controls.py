@@ -16,14 +16,14 @@ class SeekBar(gtk.VBox):
         super(SeekBar, self).__init__(homogeneous=False, spacing=4)
 
         self.__xmms = xmms
-        self.__duration = 1
+        self.__duration = 0
 
         self.scale = gtk.HScale()
         self.scale.set_draw_value(False)
         self.scale.set_range(0, 1)
         self.pack_start(self.scale)
 
-        self.time = gtk.Label('0:00')
+        self.time = gtk.Label('-')
         self.pack_start(self.time)
 
         self.scale.connect('change-value', self.__gtk_cb_change_value, None)
@@ -34,6 +34,8 @@ class SeekBar(gtk.VBox):
 
 
     def __xmms_cb_id_info(self, result):
+        if not result.value():
+            return
         self.__duration = result.value()['duration']
 
 
@@ -42,10 +44,15 @@ class SeekBar(gtk.VBox):
 
 
     def __xmms_cb_playback_playtime(self, result):
-        self.scale.set_value(result.value() / self.__duration)
-        self.time.set_text('%s / %s' % 
-                (self.__format_time(result.value()),
-                    self.__format_time(self.__duration)))
+        if self.__duration < 1:
+            self.scale.set_sensitive(False)
+            self.time.set_text('-')
+        else:
+            self.scale.set_sensitive(True)
+            self.scale.set_value(result.value() / self.__duration)
+            self.time.set_text('%s / %s' % 
+                    (self.__format_time(result.value()),
+                        self.__format_time(self.__duration)))
 
 
     def __poll_playtime(self):
@@ -122,6 +129,9 @@ class AlbumControls(gtk.VBox):
 
 
     def __xmms_cb_id_info(self, result):
+        if not result.value():
+            return
+
         try:
             artist = result.value()['artist']
         except KeyError:

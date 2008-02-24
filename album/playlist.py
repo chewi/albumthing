@@ -50,6 +50,9 @@ class PlayList(gtk.TreeView):
 
 
     def __xmms_cb_id_info(self, result):
+        if not result.value():
+            return
+
         try:
             artist = result.value()['artist']
         except KeyError:
