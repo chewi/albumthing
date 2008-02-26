@@ -7,6 +7,7 @@ pygtk.require('2.0')
 import gtk
 import gobject
 from albumthing import AlbumThing
+from coverart import CoverArt
 
 
 class Album:
@@ -16,7 +17,7 @@ class Album:
 
         self.__album_list = albumlist
 
-        self.__pixbuf_loader = gtk.gdk.PixbufLoader()
+        self.__cover_art = None
         self.__id = -1
         self.name = name
         self.artist = artist
@@ -27,17 +28,16 @@ class Album:
         if picture_front:
             self.__at.xmms.bindata_retrieve(picture_front,
                     cb=self.__xmms_cb_bindata_retrieve)
+        else:
+            self.__cover_art = CoverArt(None, 40)
+            if self.__id > -1:
+                self.__album_list.set_cover(self.__id, self.__cover_art.pixbuf)
 
 
     def __xmms_cb_bindata_retrieve(self, result):
-        try:
-            self.__pixbuf_loader.write(result.value())
-            self.__pixbuf_loader.close()
-            if self.__id > -1:
-                self.__album_list.set_cover(self.__id,
-                        self.__pixbuf_loader.get_pixbuf())
-        except Exception, detail:
-            pass
+        self.__cover_art = CoverArt(result.value(), 40)
+        if self.__id > -1:
+            self.__album_list.set_cover(self.__id, self.__cover_art.pixbuf)
 
 
     def increase_size(self, size=1):
@@ -62,5 +62,5 @@ class Album:
 
     def set_id(self, id):
         self.__id = id
-        if self.__pixbuf_loader.get_pixbuf():
-            albumlist.set_cover(self.__id, self.__pixbuf_loader.get_pixbuf())
+        if self.__cover_art:
+            self.__album_list.set_cover(self.__id, self.__cover_art.pixbuf)

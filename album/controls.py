@@ -10,6 +10,7 @@ import gobject
 from gobject import markup_escape_text
 import xmmsclient
 from albumthing import AlbumThing
+from coverart import CoverArt
 
 
 class SeekBar(gtk.VBox):
@@ -111,10 +112,13 @@ class AlbumControls(gtk.VBox):
 
         self.pack_start(self.button_box, expand=False)
 
+        self.cover_art = gtk.Image()
+
         self.info_label = gtk.Label('<b>Foo</b>\nBar')
         self.info_label.set_use_markup(True)
 
         label_holder = gtk.HBox(homogeneous=False)
+        label_holder.pack_start(self.cover_art, False, False, 4)
         label_holder.pack_start(self.info_label, False, False, 4)
 
         self.pack_start(label_holder)
@@ -142,6 +146,14 @@ class AlbumControls(gtk.VBox):
             return
 
         try:
+            picture_front = result.value()['picture_front']
+            self.__at.xmms.bindata_retrieve(picture_front,
+                    cb=self.__xmms_cb_bindata_retrieve)
+        except KeyError:
+            ca = CoverArt(None, 64)
+            self.cover_art.set_from_pixbuf(ca.pixbuf)
+
+        try:
             artist = result.value()['artist']
         except KeyError:
             artist = 'Unknown'
@@ -153,10 +165,16 @@ class AlbumControls(gtk.VBox):
             album = result.value()['album']
         except KeyError:
             album = 'Unknown'
+
         self.info_label.set_markup(
                 '<b>%s</b>\n<small>by</small> %s <small>from</small> %s' %
                 (markup_escape_text(title), markup_escape_text(artist),
                     markup_escape_text(album)))
+
+
+    def __xmms_cb_bindata_retrieve(self, result):
+        ca = CoverArt(result.value(), 64)
+        self.cover_art.set_from_pixbuf(ca.pixbuf)
 
 
     def __xmms_cb_current_id(self, result):

@@ -182,9 +182,6 @@ class AlbumList(gtk.TreeView):
         if not pixbuf:
             return
 
-        pixbuf = pixbuf.scale_simple(COVER_SIZE, COVER_SIZE,
-                gtk.gdk.INTERP_BILINEAR)
-
         iter = self.list_store.get_iter_first()
         while iter:
             if id == self.list_store.get_value(iter, 2):
