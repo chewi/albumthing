@@ -34,9 +34,9 @@ class Album:
             self.__pixbuf_loader.write(result.value())
             self.__pixbuf_loader.close()
             if self.__id > -1:
-                albumlist.set_cover(self.__id,
+                self.__album_list.set_cover(self.__id,
                         self.__pixbuf_loader.get_pixbuf())
-        except:
+        except Exception, detail:
             pass
 
 
