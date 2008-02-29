@@ -48,8 +48,6 @@ class AlbumWindow(gtk.Window):
         else:
             self.__widgets_set_sensitive(False)
 
-        self.album_list.filter_grab_focus()
-
         gobject.timeout_add_seconds(1, self.__check_connection)
 
         self.add(self.vbox)
@@ -83,6 +81,7 @@ class AlbumWindow(gtk.Window):
                 self.__cb_foo = True
                 self.setup_callbacks()
                 self.__widgets_set_sensitive(True)
+                self.album_list.filter_entry.grab_focus()
         else:
             self.__cb_foo = False
             self.__widgets_set_sensitive(False)

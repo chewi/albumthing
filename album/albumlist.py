@@ -21,7 +21,6 @@ class AlbumListThing(gtk.VBox):
         super(AlbumListThing, self).__init__(homogeneous=False, spacing=4)
 
         self.filter_entry = gtk.Entry()
-        self.filter_entry.grab_focus()
         self.pack_start(self.filter_entry, expand=False)
 
         self.album_list = AlbumList()
@@ -37,10 +36,6 @@ class AlbumListThing(gtk.VBox):
 
     def __gtk_cb_changed(self, editable, user_data):
         self.album_list.filter(self.filter_entry.get_text())
-
-
-    def filter_grab_focus(self):
-        self.filter_entry.grab_focus()
 
 
     def setup_callbacks(self):
