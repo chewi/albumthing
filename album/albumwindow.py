@@ -89,6 +89,10 @@ class AlbumWindow(gtk.Window):
             self.album_list.album_list.list_store.clear()
             self.album_list.filter_entry.set_text('')
             self.playlist.list_store.clear()
+            self.controls.info_label.set_markup('<b>Not Connected</b>')
+            self.controls.cover_art.clear()
+            self.controls.seek_bar.scale.set_value(0)
+            self.controls.seek_bar.time.set_text('-')
 
         return True
 
