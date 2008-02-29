@@ -116,6 +116,7 @@ class AlbumControls(gtk.VBox):
 
         self.info_label = gtk.Label('<b>Not Connected</b>')
         self.info_label.set_use_markup(True)
+        self.info_label.set_selectable(True)
 
         label_holder = gtk.HBox(homogeneous=False)
         label_holder.pack_start(self.cover_art, False, False, 4)
