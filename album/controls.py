@@ -143,6 +143,8 @@ class AlbumControls(gtk.VBox):
 
     def __xmms_cb_id_info(self, result):
         if not result.value():
+            # Wtf? Why is xmms2 not giving us the information we requested?
+            self.info_label.set_markup('<b>No info found</b>\nI blame xmms2')
             return
 
         try:
