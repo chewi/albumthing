@@ -16,7 +16,7 @@ class AlbumThing(object):
         def __init__(self):
             self.connected = False
             self.xmms = xmmsclient.XMMS('AlbumThing')
-            self.__connect
+            self.__connect()
             gobject.timeout_add_seconds(1, self.__check_connection)
 
 

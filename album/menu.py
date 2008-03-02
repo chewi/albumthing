@@ -6,9 +6,12 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 
+
 class MenuBar(gtk.MenuBar):
-    def __init__(self):
+    def __init__(self, about_dialog):
         super(MenuBar, self).__init__()
+
+        self.__about_dialog = about_dialog
 
         menu = gtk.Menu()
 
@@ -33,7 +36,7 @@ class MenuBar(gtk.MenuBar):
 
 
     def info_resp(self, widget, string):
-        print 'This be an Info Dialog'
+        self.__about_dialog.run()
 
 
     def quit_resp(self, widget, string):
