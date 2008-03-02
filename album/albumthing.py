@@ -34,6 +34,8 @@ class AlbumThing(object):
                 self.connected = True
             except IOError:
                 self.connected = False
+                if self.configuration.get('common', 'start_xmms2d'):
+                    os.system('xmms2-launcher')
 
 
         def __check_connection(self):
