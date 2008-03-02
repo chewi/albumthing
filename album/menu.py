@@ -15,6 +15,10 @@ class MenuBar(gtk.MenuBar):
 
         menu = gtk.Menu()
 
+        item = gtk.MenuItem('Preferences')
+        item.connect('activate', self.preferences_resp, None)
+        menu.append(item)
+
         item = gtk.MenuItem('Quit')
         item.connect('activate', self.quit_resp, None)
         menu.append(item)
@@ -41,3 +45,7 @@ class MenuBar(gtk.MenuBar):
 
     def quit_resp(self, widget, string):
         gtk.main_quit()
+
+
+    def preferences_resp(self, widget, string):
+        pass

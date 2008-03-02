@@ -45,6 +45,6 @@ class AboutDialog(gtk.AboutDialog):
         self.connect('response', self.__gtk_cb_response)
 
 
-    def __gtk_cb_response(self, window, resp):
+    def __gtk_cb_response(self, widget, resp):
         if resp == gtk.RESPONSE_CANCEL:
             self.hide()
