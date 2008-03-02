@@ -8,10 +8,11 @@ import gtk
 
 
 class MenuBar(gtk.MenuBar):
-    def __init__(self, about_dialog):
+    def __init__(self, about_dialog, preferences_dialog):
         super(MenuBar, self).__init__()
 
         self.__about_dialog = about_dialog
+        self.__preferences_dialog = preferences_dialog
 
         menu = gtk.Menu()
 
@@ -48,4 +49,4 @@ class MenuBar(gtk.MenuBar):
 
 
     def preferences_resp(self, widget, string):
-        pass
+        self.__preferences_dialog.run()

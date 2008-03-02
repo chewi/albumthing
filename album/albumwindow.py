@@ -5,7 +5,7 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
-import menu, albumlist, playlist, controls, aboutdialog
+import menu, albumlist, playlist, controls, aboutdialog, preferencesdialog
 import gobject
 from albumthing import AlbumThing
 
@@ -29,6 +29,7 @@ class AlbumWindow(gtk.Window):
         self.controls = controls.AlbumControls()
         self.vbox = gtk.VBox(homogeneous=False, spacing=8)
         self.about_dialog = aboutdialog.AboutDialog()
+        self.preferences_dialog = preferencesdialog.PreferencesDialog(self)
 
         self.hpaned = gtk.HPaned()
 
@@ -40,7 +41,8 @@ class AlbumWindow(gtk.Window):
         self.hpaned.add1(self.album_list)
         self.hpaned.add2(scrolled_playlist)
 
-        self.vbox.pack_start(menu.MenuBar(self.about_dialog), expand=False)
+        self.vbox.pack_start(menu.MenuBar(
+            self.about_dialog, self.preferences_dialog), expand=False)
         self.vbox.pack_start(self.controls, expand=False)
         self.vbox.pack_start(self.hpaned)
 
