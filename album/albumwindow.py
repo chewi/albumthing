@@ -106,7 +106,7 @@ class AlbumWindow(gtk.Window):
 
 
     def destroy(self, widget, data=None):
-        print 'bye'
+        self.__at.configuration.save()
         gtk.main_quit()
 
 

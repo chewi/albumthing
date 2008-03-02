@@ -5,11 +5,14 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
+from albumthing import AlbumThing
 
 
 class MenuBar(gtk.MenuBar):
     def __init__(self, about_dialog, preferences_dialog):
         super(MenuBar, self).__init__()
+
+        self.__at = AlbumThing ()
 
         self.__about_dialog = about_dialog
         self.__preferences_dialog = preferences_dialog
@@ -45,6 +48,7 @@ class MenuBar(gtk.MenuBar):
 
 
     def quit_resp(self, widget, string):
+        self.__at.shutdown()
         gtk.main_quit()
 
 

@@ -6,6 +6,7 @@ import os
 import xmmsclient
 from xmmsclient import glib as xmmsglib
 import gobject
+import configuration
 
 
 class AlbumThing(object):
@@ -16,6 +17,7 @@ class AlbumThing(object):
         def __init__(self):
             self.connected = False
             self.xmms = xmmsclient.XMMS('AlbumThing')
+            self.configuration = configuration.Configuration()
             self.__connect()
             gobject.timeout_add_seconds(1, self.__check_connection)
 
@@ -38,6 +40,10 @@ class AlbumThing(object):
             if not self.connected:
                 self.__connect()
             return True
+
+
+        def shutdown(self):
+            self.configuration.save()
 
 
     def __init__(self):

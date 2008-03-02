@@ -25,13 +25,17 @@ class Album:
         self.duration = duration
         self.picture_front = picture_front
 
-        if picture_front:
-            self.__at.xmms.bindata_retrieve(picture_front,
-                    cb=self.__xmms_cb_bindata_retrieve)
-        else:
-            self.__cover_art = CoverArt(None, 40)
-            if self.__id > -1:
-                self.__album_list.set_cover(self.__id, self.__cover_art.pixbuf)
+        if self.__at.configuration.get('ui', 'show_cover_art'):
+            if picture_front:
+                self.__at.xmms.bindata_retrieve(picture_front,
+                        cb=self.__xmms_cb_bindata_retrieve)
+            else:
+                if self.__at.configuration.get('ui',
+                        'show_alternative_cover_art'):
+                    self.__cover_art = CoverArt(None, 40)
+                    if self.__id > -1:
+                        self.__album_list.set_cover(self.__id,
+                                self.__cover_art.pixbuf)
 
 
     def __xmms_cb_bindata_retrieve(self, result):
