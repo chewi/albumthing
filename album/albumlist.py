@@ -20,6 +20,8 @@ class AlbumListThing(gtk.VBox):
     def __init__(self):
         super(AlbumListThing, self).__init__(homogeneous=False, spacing=4)
 
+        self.__at = AlbumThing ()
+
         self.filter_entry = gtk.Entry()
         self.pack_start(self.filter_entry, expand=False)
 
@@ -31,7 +33,18 @@ class AlbumListThing(gtk.VBox):
         scrolled_album.add(self.album_list)
         self.pack_start(scrolled_album)
 
+        if self.__at.connected:
+            self.setup_callbacks()
+
         self.filter_entry.connect('changed', self.__gtk_cb_changed, None)
+
+
+    def __xmms_cb_medialib_entry_added(self, result):
+        print 'added %s' % result.value()
+
+
+    def __xmms_cb_medialib_entry_changed(self, result):
+        print 'changed %s' % result.value()
 
 
     def __gtk_cb_changed(self, editable, user_data):
@@ -40,6 +53,10 @@ class AlbumListThing(gtk.VBox):
 
     def setup_callbacks(self):
         self.album_list.setup_callbacks()
+        self.__at.xmms.broadcast_medialib_entry_added(
+                cb=self.__xmms_cb_medialib_entry_added)
+        self.__at.xmms.broadcast_medialib_entry_changed(
+                cb=self.__xmms_cb_medialib_entry_changed)
 
 
 class AlbumList(gtk.TreeView):
@@ -72,9 +89,6 @@ class AlbumList(gtk.TreeView):
 
         self.set_model(self.list_store)
         self.set_search_column(4)
-
-        if self.__at.connected:
-            self.setup_callbacks()
 
         self.get_selection().connect('changed',
                 self.__gtk_cb_selection_changed, None)
