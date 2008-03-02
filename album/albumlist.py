@@ -48,7 +48,7 @@ class AlbumListThing(gtk.VBox):
 
 
     def __gtk_cb_changed(self, editable, user_data):
-        self.album_list.filter(self.filter_entry.get_text())
+        self.refresh()
 
 
     def setup_callbacks(self):
@@ -57,6 +57,10 @@ class AlbumListThing(gtk.VBox):
                 cb=self.__xmms_cb_medialib_entry_added)
         self.__at.xmms.broadcast_medialib_entry_changed(
                 cb=self.__xmms_cb_medialib_entry_changed)
+
+
+    def refresh(self):
+        self.album_list.filter(self.filter_entry.get_text())
 
 
 class AlbumList(gtk.TreeView):

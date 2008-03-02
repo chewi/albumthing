@@ -15,6 +15,7 @@ class PreferencesDialog(gtk.Dialog):
                 buttons=(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE))
 
         self.__at = AlbumThing ()
+        self.__parent = parent
 
         self.__start_xmms2d_check_button = gtk.CheckButton(
                 'Automatically start xmms2d')
@@ -80,9 +81,13 @@ class PreferencesDialog(gtk.Dialog):
             self.__alternative_cover_art_check_button.set_sensitive(False)
             self.__at.configuration.set('ui', 'show_cover_art', '0')
 
+        self.__parent.album_list.refresh()
+
 
     def __gtk_cb_alternative_cover_art_toggled(self, togglebutton):
         if self.__alternative_cover_art_check_button.get_active():
             self.__at.configuration.set('ui', 'show_alternative_cover_art', '1')
         else:
             self.__at.configuration.set('ui', 'show_alternative_cover_art', '0')
+
+        self.__parent.album_list.refresh()
