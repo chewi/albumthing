@@ -41,9 +41,6 @@ class PlayList(gtk.TreeView):
         self.set_model(self.list_store)
         self.set_search_column(3)
 
-        if self.__at.connected:
-            self.setup_callbacks()
-
         self.connect('row-activated', self.__gtk_cb_row_activated, None)
 
 
@@ -71,11 +68,7 @@ class PlayList(gtk.TreeView):
         for id in result.value():
             self.__at.xmms.medialib_get_info(id, cb=self.__xmms_cb_id_info)
         self.__at.xmms.playlist_current_pos(cb=self.__xmms_cb_current_pos)
-        self.__at.xmms.broadcast_playlist_current_pos(
-                cb=self.__xmms_cb_current_pos)
         self.__at.xmms.playback_status(cb=self.__xmms_cb_playback_status)
-        self.__at.xmms.broadcast_playback_status(
-                cb=self.__xmms_cb_playback_status)
 
 
     def __xmms_cb_current_pos(self, result):
@@ -169,3 +162,7 @@ class PlayList(gtk.TreeView):
                 cb=self.__xmms_cb_playlist_loaded)
         self.__at.xmms.broadcast_playlist_changed(
                 cb=self.__xmms_cb_playlist_changed)
+        self.__at.xmms.broadcast_playlist_current_pos(
+                cb=self.__xmms_cb_current_pos)
+        self.__at.xmms.broadcast_playback_status(
+                cb=self.__xmms_cb_playback_status)

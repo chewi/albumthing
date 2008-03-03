@@ -46,11 +46,6 @@ class AlbumWindow(gtk.Window):
         self.vbox.pack_start(self.controls, expand=False)
         self.vbox.pack_start(self.hpaned)
 
-        if self.__at.connected:
-            self.setup_callbacks()
-        else:
-            self.__widgets_set_sensitive(False)
-
         gobject.timeout_add_seconds(1, self.__check_connection)
 
         self.add(self.vbox)

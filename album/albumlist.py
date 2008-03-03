@@ -33,9 +33,6 @@ class AlbumListThing(gtk.VBox):
         scrolled_album.add(self.album_list)
         self.pack_start(scrolled_album)
 
-        if self.__at.connected:
-            self.setup_callbacks()
-
         self.filter_entry.connect('changed', self.__gtk_cb_changed, None)
 
 
@@ -156,6 +153,7 @@ class AlbumList(gtk.TreeView):
        coll = xc.Union(*colls)
        self.__at.xmms.playlist_clear('_album')
        self.__at.xmms.playlist_add_collection(coll, playlist='_album')
+       self.__at.xmms.playlist_sort(['tracknr'], playlist='_album')
        self.__at.xmms.playlist_load('_album')
 
 
