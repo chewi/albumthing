@@ -29,11 +29,13 @@ class PlayList(gtk.TreeView):
         self.text_renderer = gtk.CellRendererText()
 
         self.status_column = gtk.TreeViewColumn('status')
+        self.status_column.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
         self.status_column.pack_start(self.pixbuf_renderer, True)
         self.status_column.add_attribute(self.pixbuf_renderer, 'stock-id', 0)
         self.append_column(self.status_column)
 
         self.name_column = gtk.TreeViewColumn('name')
+        self.name_column.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
         self.name_column.pack_start(self.text_renderer)
         self.name_column.add_attribute(self.text_renderer, 'markup', 1)
         self.append_column(self.name_column)
