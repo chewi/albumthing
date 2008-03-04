@@ -79,6 +79,7 @@ class AlbumList(gtk.TreeView):
         self.text_renderer = gtk.CellRendererText()
 
         self.cover_column = gtk.TreeViewColumn('cover')
+        self.cover_column.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
         self.cover_column.pack_start(self.pixbuf_renderer, True)
         self.cover_column.add_attribute(self.pixbuf_renderer, 'pixbuf', 0)
         self.append_column(self.cover_column)
