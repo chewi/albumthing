@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=AlbumThing XMMS2 Client
+Comment=Manage Music
+Comment[de]=Musik verwalten
+Categories=GNOME;Application;AudioVideo;
+Encoding=UTF-8
+Exec=albumthing.py
+Terminal=false
+Type=Application
