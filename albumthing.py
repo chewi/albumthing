@@ -4,9 +4,9 @@
 # See COPYING file for details.
 
 
-from album.albumthing import AlbumThing
+from AlbumThing.albumthing import AlbumThing
 import gtk
-from album import albumwindow
+from AlbumThing import albumwindow
 
 
 
