@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-03-05 20:56+CET\n"
+"POT-Creation-Date: 2008-03-05 21:39+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,6 +14,20 @@ msgstr ""
 "Content-Transfer-Encoding: ENCODING\n"
 "Generated-By: pygettext.py 1.5\n"
 
+
+#: ../AlbumThing/const.py:15
+msgid "A simple XMMS2 client"
+msgstr ""
+
+#: ../AlbumThing/const.py:17
+msgid "Unknown"
+msgstr ""
+
+#: ../AlbumThing/controls.py:146
+msgid ""
+"<b>No info found</b>\n"
+"I blame xmms2"
+msgstr ""
 
 #: ../AlbumThing/menu.py:22
 msgid "Preferences"
@@ -33,5 +47,17 @@ msgstr ""
 
 #: ../AlbumThing/menu.py:39
 msgid "Help"
+msgstr ""
+
+#: ../AlbumThing/preferencesdialog.py:21
+msgid "Automatically start xmms2d"
+msgstr ""
+
+#: ../AlbumThing/preferencesdialog.py:27
+msgid "Show Cover Art in the album list"
+msgstr ""
+
+#: ../AlbumThing/preferencesdialog.py:35
+msgid "Show icons for albums without cover art"
 msgstr ""
 

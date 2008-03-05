@@ -1,12 +1,12 @@
-# German translations for PACKAGE package
-# German messages for PACKAGE.
+# German translations for AlbumThing package
+# German messages for AlbumThing.
 # Copyright (C) 2008 ORGANIZATION
 # Sebastian Sareyko <sebastian@sareyko.net>, 2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-03-05 20:56+CET\n"
+"POT-Creation-Date: 2008-03-05 21:39+CET\n"
 "PO-Revision-Date: 2008-03-05 20:57+0100\n"
 "Last-Translator: Sebastian Sareyko <sebastian@sareyko.net>\n"
 "Language-Team: German\n"
@@ -16,13 +16,27 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: ../AlbumThing/const.py:15
+msgid "A simple XMMS2 client"
+msgstr "Ein einfacher XMMS2-Client"
+
+#: ../AlbumThing/const.py:17
+msgid "Unknown"
+msgstr "Unbekannt"
+
+#: ../AlbumThing/controls.py:146
+msgid ""
+"<b>No info found</b>\n"
+"I blame xmms2"
+msgstr "Ich gebe xmms2 die Schuld"
+
 #: ../AlbumThing/menu.py:22
 msgid "Preferences"
-msgstr ""
+msgstr "Einstellungen"
 
 #: ../AlbumThing/menu.py:26
 msgid "Quit"
-msgstr ""
+msgstr "Beenden"
 
 #: ../AlbumThing/menu.py:30
 msgid "File"
@@ -30,8 +44,20 @@ msgstr "Datei"
 
 #: ../AlbumThing/menu.py:35
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: ../AlbumThing/menu.py:39
 msgid "Help"
 msgstr "Hilfe"
+
+#: ../AlbumThing/preferencesdialog.py:21
+msgid "Automatically start xmms2d"
+msgstr "xmms2d automatisch starten"
+
+#: ../AlbumThing/preferencesdialog.py:27
+msgid "Show Cover Art in the album list"
+msgstr "CoverArt in der Album-Liste anzeigen"
+
+#: ../AlbumThing/preferencesdialog.py:35
+msgid "Show icons for albums without cover art"
+msgstr "Zeige alternative Icons für Alben ohne CoverArt"
