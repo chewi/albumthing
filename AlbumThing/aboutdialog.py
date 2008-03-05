@@ -5,13 +5,15 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
+import const
+
 
 class AboutDialog(gtk.AboutDialog):
     def __init__(self):
         super(AboutDialog, self).__init__()
 
         self.set_name('AlbumThing')
-        self.set_version('0.0')
+        self.set_version(const.VERSION)
         self.set_copyright('Copyright \xc2\xa9 2008 Sebastian Sareyko')
         self.set_website('http://nooms.de/')
         self.set_authors(['Sebastian Sareyko'])

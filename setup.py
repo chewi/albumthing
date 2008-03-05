@@ -3,9 +3,10 @@
 from distutils.core import setup
 from glob import glob
 import os
+from AlbumThing import const
 
 
-NAME = 'AlbumThing'
+NAME = const.NAME
 DATA_FILES = [('share/applications', ['data/AlbumThing.desktop'])]
 
 for f in glob('po/*.po'):
@@ -20,7 +21,7 @@ for f in glob('po/*.po'):
         ['po/%s/albumthing.mo' % lang])]
 
 setup(name=NAME,
-      version='0.1',
+      version=const.VERSION,
       description='A simple XMMS2 client',
       author='Sebastian Sareyko',
       url='http://nooms.de/',
