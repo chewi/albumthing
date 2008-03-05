@@ -8,6 +8,7 @@ import gtk
 import menu, albumlist, playlist, controls, aboutdialog, preferencesdialog
 import gobject
 from albumthing import AlbumThing
+import const
 
 
 class AlbumWindow(gtk.Window):
@@ -60,11 +61,11 @@ class AlbumWindow(gtk.Window):
         try:
             artist = result.value()['artist']
         except KeyError:
-            artist = 'Unknown'
+            artist = const.UNKNOWN
         try:
             title = result.value()['title']
         except KeyError:
-            title = 'Unknown (%s)' % result.value()['url']
+            title = '%s (%s)' % (const.UNKNOWN, result.value()['url'])
         self.set_title('%s - %s' % (artist, title))
 
 

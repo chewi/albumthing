@@ -11,9 +11,7 @@ from xmmsclient import collections as xc
 import operator
 from album import Album
 from albumthing import AlbumThing
-
-
-COVER_SIZE = 40
+import const
 
 
 class AlbumListThing(gtk.VBox):
@@ -75,7 +73,7 @@ class AlbumList(gtk.TreeView):
                 gobject.TYPE_STRING, gobject.TYPE_STRING)
 
         self.pixbuf_renderer = gtk.CellRendererPixbuf()
-        self.pixbuf_renderer.set_fixed_size(-1, COVER_SIZE + 4)
+        self.pixbuf_renderer.set_fixed_size(-1, const.COVER_SIZE + 4)
         self.text_renderer = gtk.CellRendererText()
 
         self.cover_column = gtk.TreeViewColumn('cover')
@@ -171,12 +169,12 @@ class AlbumList(gtk.TreeView):
             return
 
         if not album.name:
-            name = 'Unknown'
+            name = const.UNKNOWN
         else:
             name = album.name
 
         if not album.artist:
-            artist = 'Unknown'
+            artist = const.UNKNOWN
         else:
             artist = album.artist
 

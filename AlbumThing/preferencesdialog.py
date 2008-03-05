@@ -18,13 +18,13 @@ class PreferencesDialog(gtk.Dialog):
         self.__parent = parent
 
         self.__start_xmms2d_check_button = gtk.CheckButton(
-                'Automatically start xmms2d')
+                _('Automatically start xmms2d'))
         self.__start_xmms2d_check_button.show()
         self.vbox.pack_start(self.__start_xmms2d_check_button,
                 True, True, 0)
 
         self.__cover_art_check_button = gtk.CheckButton(
-                'Show Cover Art in the album list')
+                _('Show Cover Art in the album list'))
         self.__cover_art_check_button.show()
         self.vbox.pack_start(self.__cover_art_check_button,
                 True, True, 0)
@@ -32,7 +32,7 @@ class PreferencesDialog(gtk.Dialog):
         alignment = gtk.Alignment()
         alignment.set_padding(0, 0, 20, 0)
         self.__alternative_cover_art_check_button = gtk.CheckButton(
-                'Show icons for albums without cover art')
+                _('Show icons for albums without cover art'))
         alignment.add(self.__alternative_cover_art_check_button)
         alignment.show_all()
         self.vbox.pack_start(alignment, True, True, 0)

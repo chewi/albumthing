@@ -9,6 +9,7 @@ import gobject
 from gobject import markup_escape_text
 import xmmsclient
 from albumthing import AlbumThing
+import const
 
 
 class PlayList(gtk.TreeView):
@@ -53,15 +54,15 @@ class PlayList(gtk.TreeView):
         try:
             artist = result.value()['artist']
         except KeyError:
-            artist = 'Unknown'
+            artist = const.UNKNOWN
         try:
             title = result.value()['title']
         except KeyError:
-            title = 'Unknown (%s)' % result.value()['url']
+            title = '%s (%s)' % (const.UNKNOWN, result.value()['url'])
         try:
             album = result.value()['album']
         except KeyError:
-            album = 'Unknown'
+            album = const.UNKNOWN
         self.add_entry(result.value()['id'], artist, title, album)
 
 

@@ -11,6 +11,7 @@ from gobject import markup_escape_text
 import xmmsclient
 from albumthing import AlbumThing
 from coverart import CoverArt
+import const
 
 
 class SeekBar(gtk.VBox):
@@ -142,7 +143,7 @@ class AlbumControls(gtk.VBox):
     def __xmms_cb_id_info(self, result):
         if not result.value():
             # Wtf? Why is xmms2 not giving us the information we requested?
-            self.info_label.set_markup('<b>No info found</b>\nI blame xmms2')
+            self.info_label.set_markup(_('<b>No info found</b>\nI blame xmms2'))
             return
 
         try:
@@ -156,15 +157,15 @@ class AlbumControls(gtk.VBox):
         try:
             artist = result.value()['artist']
         except KeyError:
-            artist = 'Unknown'
+            artist = const.UNKNOWN
         try:
             title = result.value()['title']
         except KeyError:
-            title = 'Unknown (%s)' % result.value()['url']
+            title = '%s (%s)' % (const.UNKNOWN, result.value()['url'])
         try:
             album = result.value()['album']
         except KeyError:
-            album = 'Unknown'
+            album = const.UNKNOWN
 
         self.info_label.set_markup(
                 '<b>%s</b>\n<small>by</small> %s <small>from</small> %s' %

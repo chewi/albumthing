@@ -2,11 +2,17 @@
 # See COPYING file for details.
 
 
-import gettext
-gettext.install('AlbumThing')
+try:
+    gettext
+except:
+    import gettext
+    gettext.install('AlbumThing')
 
 
 NAME = 'AlbumThing'
 VERSION = '0.0'
 URL = 'http://nooms.de/'
 DESC = _('A simple XMMS2 client')
+
+UNKNOWN = _('Unknown')
+COVER_SIZE = 40
