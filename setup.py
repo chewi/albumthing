@@ -22,9 +22,9 @@ for f in glob('po/*.po'):
 
 setup(name=NAME,
       version=const.VERSION,
-      description='A simple XMMS2 client',
+      description=const.DESC,
       author='Sebastian Sareyko',
-      url='http://nooms.de/',
+      url=const.URL,
       packages=['AlbumThing'],
       scripts=['albumthing.py'],
       data_files=DATA_FILES,

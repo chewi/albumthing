@@ -12,10 +12,11 @@ class AboutDialog(gtk.AboutDialog):
     def __init__(self):
         super(AboutDialog, self).__init__()
 
-        self.set_name('AlbumThing')
+        self.set_name(const.NAME)
         self.set_version(const.VERSION)
         self.set_copyright('Copyright \xc2\xa9 2008 Sebastian Sareyko')
-        self.set_website('http://nooms.de/')
+        self.set_website(const.URL)
+        self.set_comments(_(const.DESC))
         self.set_authors(['Sebastian Sareyko'])
         self.set_license(
 "Redistribution and use in source and binary forms, with or without\n"

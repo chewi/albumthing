@@ -4,3 +4,5 @@
 
 NAME = 'AlbumThing'
 VERSION = '0.0'
+URL = 'http://nooms.de/'
+DESC = 'A simple XMMS2 client'
