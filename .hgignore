@@ -7,3 +7,5 @@ syntax: glob
 *.pyc
 build/
 po/*/*.mo
+dist/
+MANIFEST
