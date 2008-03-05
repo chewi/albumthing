@@ -6,7 +6,7 @@ try:
     gettext
 except:
     import gettext
-    gettext.install('AlbumThing')
+    gettext.install('albumthing')
 
 
 NAME = 'AlbumThing'

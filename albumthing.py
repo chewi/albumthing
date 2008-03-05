@@ -11,7 +11,7 @@ from AlbumThing import albumwindow
 
 
 if __name__ == '__main__':
-    gettext.install('AlbumThing')
+    gettext.install('albumthing')
 
     AlbumThing()
 

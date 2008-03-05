@@ -16,7 +16,7 @@ for f in glob('po/*.po'):
         os.makedirs('po/%s' % lang)
     except OSError:
         pass
-    os.system('msgfmt %s -o %s/AlbumThing.mo' % (f, filename))
+    os.system('msgfmt %s -o %s/albumthing.mo' % (f, filename))
     DATA_FILES += [('share/locale/%s/LC_MESSAGES' % lang,
         ['po/%s/albumthing.mo' % lang])]
 
