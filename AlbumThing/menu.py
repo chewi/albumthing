@@ -19,24 +19,24 @@ class MenuBar(gtk.MenuBar):
 
         menu = gtk.Menu()
 
-        item = gtk.MenuItem('Preferences')
+        item = gtk.MenuItem(_('Preferences'))
         item.connect('activate', self.preferences_resp, None)
         menu.append(item)
 
-        item = gtk.MenuItem('Quit')
+        item = gtk.MenuItem(_('Quit'))
         item.connect('activate', self.quit_resp, None)
         menu.append(item)
 
-        file_menu = gtk.MenuItem('File')
+        file_menu = gtk.MenuItem(_('File'))
         file_menu.set_submenu(menu)
 
         menu = gtk.Menu()
 
-        item = gtk.MenuItem('Info')
+        item = gtk.MenuItem(_('Info'))
         item.connect('activate', self.info_resp, None)
         menu.append(item)
 
-        help_menu = gtk.MenuItem('Help')
+        help_menu = gtk.MenuItem(_('Help'))
         help_menu.set_submenu(menu)
 
         self.append(file_menu)

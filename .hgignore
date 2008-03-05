@@ -6,3 +6,4 @@ syntax: glob
 *.orig
 *.pyc
 build/
+po/*/*.mo

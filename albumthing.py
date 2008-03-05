@@ -4,13 +4,15 @@
 # See COPYING file for details.
 
 
-from AlbumThing.albumthing import AlbumThing
 import gtk
+import gettext
+from AlbumThing.albumthing import AlbumThing
 from AlbumThing import albumwindow
 
 
-
 if __name__ == '__main__':
+    gettext.install('AlbumThing')
+
     AlbumThing()
 
     win = albumwindow.AlbumWindow()

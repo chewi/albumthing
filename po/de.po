@@ -1,0 +1,37 @@
+# German translations for PACKAGE package
+# German messages for PACKAGE.
+# Copyright (C) 2008 ORGANIZATION
+# Sebastian Sareyko <sebastian@sareyko.net>, 2008.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2008-03-05 20:56+CET\n"
+"PO-Revision-Date: 2008-03-05 20:57+0100\n"
+"Last-Translator: Sebastian Sareyko <sebastian@sareyko.net>\n"
+"Language-Team: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../AlbumThing/menu.py:22
+msgid "Preferences"
+msgstr ""
+
+#: ../AlbumThing/menu.py:26
+msgid "Quit"
+msgstr ""
+
+#: ../AlbumThing/menu.py:30
+msgid "File"
+msgstr "Datei"
+
+#: ../AlbumThing/menu.py:35
+msgid "Info"
+msgstr ""
+
+#: ../AlbumThing/menu.py:39
+msgid "Help"
+msgstr "Hilfe"
