@@ -60,4 +60,4 @@ msgstr "CoverArt in der Album-Liste anzeigen"
 
 #: ../AlbumThing/preferencesdialog.py:35
 msgid "Show icons for albums without cover art"
-msgstr "Zeige alternative Icons für Alben ohne CoverArt"
+msgstr "Zeige alternative Icons fuer Alben ohne CoverArt"
