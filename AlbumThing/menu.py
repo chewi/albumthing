@@ -48,7 +48,7 @@ class MenuBar(gtk.MenuBar):
 
 
     def quit_resp(self, widget, string):
-        self.__at.shutdown()
+        self.__at.configuration.save()
         gtk.main_quit()
 
 

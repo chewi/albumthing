@@ -44,10 +44,6 @@ class AlbumThing(object):
             return True
 
 
-        def shutdown(self):
-            self.configuration.save()
-
-
     def __init__(self):
         if AlbumThing.__instance is None:
             AlbumThing.__instance = AlbumThing.Singleton()
