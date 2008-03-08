@@ -97,6 +97,25 @@ class AlbumList(gtk.TreeView):
 
 
     def __xmms_cb_song_list(self, result):
+        def eq(str1, str2):
+            ret = False
+            try:
+                if str1.lower() == str2.lower():
+                    ret = True
+            except AttributeError:
+                if not str1 and not str2:
+                    ret = True
+            return ret
+
+        def compare(a1, a2):
+            if not a1['album'] and not a2['album']:
+                return 0
+            elif not a1['album']:
+                return -1
+            elif not a2['album']:
+                return 1
+            return cmp(a1['album'].lower(), a2['album'].lower())
+
         self.list_store.clear()
         combine = self.__at.configuration.get('ui', 'combine_va_albums')
         duration = 0
@@ -104,13 +123,13 @@ class AlbumList(gtk.TreeView):
         last_artist = None
         album = None
         songs = result.value()
-        songs.sort(key=operator.itemgetter('album', 'artist'))
+        songs.sort(compare)
         for song in songs:
-            if album and last_album == song['album'] and \
+            if album and eq(last_album, song['album']) and \
                     last_artist == song['artist']:
                 album.increase_size()
                 album.add_duration(song['duration'])
-            elif album and last_album == song['album'] and combine:
+            elif album and eq(last_album, song['album']) and combine:
                 album.increase_size()
                 album.add_duration(song['duration'])
                 album.various_artists = True
