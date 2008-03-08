@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-03-05 21:39+CET\n"
+"POT-Creation-Date: 2008-03-08 22:59+CET\n"
 "PO-Revision-Date: 2008-03-05 20:57+0100\n"
 "Last-Translator: Sebastian Sareyko <sebastian@sareyko.net>\n"
 "Language-Team: German\n"
@@ -15,6 +15,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../AlbumThing/albumlist.py:215
+msgid "Various Artists"
+msgstr "Verschiedene Kuenstler"
 
 #: ../AlbumThing/const.py:15
 msgid "A simple XMMS2 client"
@@ -61,3 +65,7 @@ msgstr "CoverArt in der Album-Liste anzeigen"
 #: ../AlbumThing/preferencesdialog.py:35
 msgid "Show icons for albums without cover art"
 msgstr "Zeige alternative Icons fuer Alben ohne CoverArt"
+
+#: ../AlbumThing/preferencesdialog.py:41
+msgid "Combine albums with various artists"
+msgstr "Alben mit mehreren Kuenstlern zusammenfassen"

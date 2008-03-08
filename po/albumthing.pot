@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-03-05 21:39+CET\n"
+"POT-Creation-Date: 2008-03-08 22:59+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,6 +14,10 @@ msgstr ""
 "Content-Transfer-Encoding: ENCODING\n"
 "Generated-By: pygettext.py 1.5\n"
 
+
+#: ../AlbumThing/albumlist.py:215
+msgid "Various Artists"
+msgstr ""
 
 #: ../AlbumThing/const.py:15
 msgid "A simple XMMS2 client"
@@ -59,5 +63,9 @@ msgstr ""
 
 #: ../AlbumThing/preferencesdialog.py:35
 msgid "Show icons for albums without cover art"
+msgstr ""
+
+#: ../AlbumThing/preferencesdialog.py:41
+msgid "Combine albums with various artists"
 msgstr ""
 
