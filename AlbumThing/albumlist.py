@@ -70,7 +70,8 @@ class AlbumList(gtk.TreeView):
 
         self.list_store = gtk.ListStore(gtk.gdk.Pixbuf,
                 gobject.TYPE_STRING, gobject.TYPE_INT,
-                gobject.TYPE_STRING, gobject.TYPE_STRING)
+                gobject.TYPE_STRING, gobject.TYPE_STRING,
+                gobject.TYPE_BOOLEAN)
 
         self.pixbuf_renderer = gtk.CellRendererPixbuf()
         self.pixbuf_renderer.set_fixed_size(-1, const.COVER_SIZE + 4)
@@ -97,6 +98,7 @@ class AlbumList(gtk.TreeView):
 
     def __xmms_cb_song_list(self, result):
         self.list_store.clear()
+        combine = self.__at.configuration.get('ui', 'combine_va_albums')
         duration = 0
         last_album = None
         last_artist = None
@@ -108,6 +110,10 @@ class AlbumList(gtk.TreeView):
                     last_artist == song['artist']:
                 album.increase_size()
                 album.add_duration(song['duration'])
+            elif album and last_album == song['album'] and combine:
+                album.increase_size()
+                album.add_duration(song['duration'])
+                album.various_artists = True
             else:
                 if album:
                     self.add_album(album)
@@ -133,22 +139,29 @@ class AlbumList(gtk.TreeView):
            iter = self.list_store.get_iter(path)
            artist = self.list_store.get_value(iter, 3)
            album = self.list_store.get_value(iter, 4)
-           if not artist and not album:
-               colls.append(xc.Intersection(
-                   xc.Complement(xc.Has(xc.Universe(), 'artist')),
-                   xc.Complement(xc.Has(xc.Universe(), 'album'))))
-           elif not artist:
-               colls.append(xc.Intersection(
-                   xc.Complement(xc.Has(xc.Universe(), 'artist')),
-                   xc.Equals(field='album', value=album)))
-           elif not album:
-               colls.append(xc.Intersection(
-                   xc.Complement(xc.Has(xc.Universe(), 'album')),
-                   xc.Equals(field='artist', value=artist)))
+           va = self.list_store.get_value(iter, 5)
+           if not va:
+               if not artist and not album:
+                   colls.append(xc.Intersection(
+                       xc.Complement(xc.Has(xc.Universe(), 'artist')),
+                       xc.Complement(xc.Has(xc.Universe(), 'album'))))
+               elif not artist:
+                   colls.append(xc.Intersection(
+                       xc.Complement(xc.Has(xc.Universe(), 'artist')),
+                       xc.Equals(field='album', value=album)))
+               elif not album:
+                   colls.append(xc.Intersection(
+                       xc.Complement(xc.Has(xc.Universe(), 'album')),
+                       xc.Equals(field='artist', value=artist)))
+               else:
+                   colls.append(xc.Intersection(
+                       xc.Equals(field='artist', value=artist),
+                       xc.Equals(field='album', value=album)))
            else:
-               colls.append(xc.Intersection(
-                   xc.Equals(field='artist', value=artist),
-                   xc.Equals(field='album', value=album)))
+               if not album:
+                   colls.append(xc.Complement(xc.Has(xc.Universe(), 'album')))
+               else:
+                   colls.append(xc.Equals(field='album', value=album))
 
        coll = xc.Union(*colls)
        self.__at.xmms.playlist_clear('_album')
@@ -179,11 +192,14 @@ class AlbumList(gtk.TreeView):
         else:
             artist = album.artist
 
+        if album.various_artists:
+            artist = _('Various Artists')
+
         self.list_store.append([None,
             '<b>%s</b>\n%s <small>- %d Tracks/%d:%02d Minutes</small>' %
             (markup_escape_text(name), markup_escape_text(artist),
                 album.size, album.get_duration_min(), album.get_duration_sec()),
-            self.__ids, album.artist, album.name])
+            self.__ids, album.artist, album.name, album.various_artists])
 
         album.set_id(self.__ids)
         self.__increase_ids()

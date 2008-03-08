@@ -24,6 +24,7 @@ class Album:
         self.size = size
         self.duration = duration
         self.picture_front = picture_front
+        self.various_artists = False
 
         if self.__at.configuration.get('ui', 'show_cover_art'):
             if picture_front:

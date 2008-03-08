@@ -37,6 +37,12 @@ class PreferencesDialog(gtk.Dialog):
         alignment.show_all()
         self.vbox.pack_start(alignment, True, True, 0)
 
+        self.__combine_va_check_button = gtk.CheckButton(
+                _('Combine albums with various artists'))
+        self.__combine_va_check_button.show()
+        self.vbox.pack_start(self.__combine_va_check_button,
+                True, True, 0)
+
         if self.__at.configuration.get('common', 'start_xmms2d'):
             self.__start_xmms2d_check_button.set_active(True)
         else:
@@ -52,6 +58,11 @@ class PreferencesDialog(gtk.Dialog):
         else:
             self.__alternative_cover_art_check_button.set_active(False)
 
+        if self.__at.configuration.get('ui', 'combine_va_albums'):
+            self.__combine_va_check_button.set_active(True)
+        else:
+            self.__combine_va_check_button.set_active(False)
+
         self.connect('response', self.__gtk_cb_response)
         self.__start_xmms2d_check_button.connect('toggled',
                 self.__gtk_cb_start_xmms2d_toggled)
@@ -59,6 +70,8 @@ class PreferencesDialog(gtk.Dialog):
                 self.__gtk_cb_cover_art_toggled)
         self.__alternative_cover_art_check_button.connect('toggled',
                 self.__gtk_cb_alternative_cover_art_toggled)
+        self.__combine_va_check_button.connect('toggled',
+                self.__gtk_cb_combine_va_toggled)
 
 
     def __gtk_cb_response(self, widget, resp):
@@ -89,5 +102,14 @@ class PreferencesDialog(gtk.Dialog):
             self.__at.configuration.set('ui', 'show_alternative_cover_art', '1')
         else:
             self.__at.configuration.set('ui', 'show_alternative_cover_art', '0')
+
+        self.__parent.album_list.refresh()
+
+
+    def __gtk_cb_combine_va_toggled(self, togglebutton):
+        if self.__combine_va_check_button.get_active():
+            self.__at.configuration.set('ui', 'combine_va_albums', '1')
+        else:
+            self.__at.configuration.set('ui', 'combine_va_albums', '0')
 
         self.__parent.album_list.refresh()
