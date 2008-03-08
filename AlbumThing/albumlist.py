@@ -83,6 +83,7 @@ class AlbumList(gtk.TreeView):
         self.append_column(self.cover_column)
 
         self.name_column = gtk.TreeViewColumn('name')
+        self.name_column.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
         self.name_column.pack_start(self.text_renderer)
         self.name_column.add_attribute(self.text_renderer, 'markup', 1)
         self.append_column(self.name_column)
