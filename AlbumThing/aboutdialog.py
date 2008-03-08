@@ -17,7 +17,7 @@ class AboutDialog(gtk.AboutDialog):
         self.set_copyright('Copyright \xc2\xa9 2008 Sebastian Sareyko')
         self.set_website(const.URL)
         self.set_comments(const.DESC)
-        self.set_authors(['Sebastian Sareyko'])
+        self.set_authors(['Sebastian Sareyko <smoon@nooms.de>'])
         self.set_license(
 "Redistribution and use in source and binary forms, with or without\n"
 "modification, are permitted provided that the following conditions are met:\n"
