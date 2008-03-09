@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-03-08 22:59+CET\n"
+"POT-Creation-Date: 2008-03-09 22:08+CET\n"
 "PO-Revision-Date: 2008-03-05 20:57+0100\n"
 "Last-Translator: Sebastian Sareyko <sebastian@sareyko.net>\n"
 "Language-Team: German\n"
@@ -34,25 +34,25 @@ msgid ""
 "I blame xmms2"
 msgstr "Ich gebe xmms2 die Schuld"
 
-#: ../AlbumThing/menu.py:22
-msgid "Preferences"
-msgstr "Einstellungen"
+#: ../AlbumThing/menu.py:16
+msgid "/_File"
+msgstr "/_Datei"
 
-#: ../AlbumThing/menu.py:26
-msgid "Quit"
-msgstr "Beenden"
+#: ../AlbumThing/menu.py:17
+msgid "/_File/_Preferences"
+msgstr "/_Datei/_Einstellungen"
 
-#: ../AlbumThing/menu.py:30
-msgid "File"
-msgstr "Datei"
+#: ../AlbumThing/menu.py:19
+msgid "/_File/_Quit"
+msgstr "/_Datei/_Beenden"
 
-#: ../AlbumThing/menu.py:35
-msgid "Info"
-msgstr "Info"
+#: ../AlbumThing/menu.py:20
+msgid "/_Help"
+msgstr "/_Hilfe"
 
-#: ../AlbumThing/menu.py:39
-msgid "Help"
-msgstr "Hilfe"
+#: ../AlbumThing/menu.py:21
+msgid "/_Help/_About"
+msgstr "/_Hilfe/_Ueber"
 
 #: ../AlbumThing/preferencesdialog.py:21
 msgid "Automatically start xmms2d"

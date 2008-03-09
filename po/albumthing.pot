@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-03-08 22:59+CET\n"
+"POT-Creation-Date: 2008-03-09 22:08+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,24 +33,24 @@ msgid ""
 "I blame xmms2"
 msgstr ""
 
-#: ../AlbumThing/menu.py:22
-msgid "Preferences"
+#: ../AlbumThing/menu.py:16
+msgid "/_File"
 msgstr ""
 
-#: ../AlbumThing/menu.py:26
-msgid "Quit"
+#: ../AlbumThing/menu.py:17
+msgid "/_File/_Preferences"
 msgstr ""
 
-#: ../AlbumThing/menu.py:30
-msgid "File"
+#: ../AlbumThing/menu.py:19
+msgid "/_File/_Quit"
 msgstr ""
 
-#: ../AlbumThing/menu.py:35
-msgid "Info"
+#: ../AlbumThing/menu.py:20
+msgid "/_Help"
 msgstr ""
 
-#: ../AlbumThing/menu.py:39
-msgid "Help"
+#: ../AlbumThing/menu.py:21
+msgid "/_Help/_About"
 msgstr ""
 
 #: ../AlbumThing/preferencesdialog.py:21
