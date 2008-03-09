@@ -5,9 +5,13 @@
 import ConfigParser
 import os
 import xmmsclient
+from albumthing import AlbumThing
+
 
 class Configuration:
     def __init__(self):
+        self.__at = AlbumThing ()
+
         self.__cfg = ConfigParser.ConfigParser()
         self.__configuration_file = os.path.join(xmmsclient.userconfdir_get(),
                 'clients', 'AlbumThing.ini')
@@ -44,16 +48,16 @@ class Configuration:
         self.__cfg.set(section, var, value)
 
 
-    def save(self, win):
+    def save(self):
         try:
             self.__cfg.add_section('win')
         except ConfigParser.DuplicateSectionError:
             pass
-        self.__cfg.set('win', 'width', win.get_size()[0])
-        self.__cfg.set('win', 'height', win.get_size()[1])
-        self.__cfg.set('win', 'pos_x', win.get_position()[0])
-        self.__cfg.set('win', 'pos_y', win.get_position()[1])
-        self.__cfg.set('win', 'pos_hpaned', win.hpaned.get_position())
+        self.__cfg.set('win', 'width', self.__at.win.get_size()[0])
+        self.__cfg.set('win', 'height', self.__at.win.get_size()[1])
+        self.__cfg.set('win', 'pos_x', self.__at.win.get_position()[0])
+        self.__cfg.set('win', 'pos_y', self.__at.win.get_position()[1])
+        self.__cfg.set('win', 'pos_hpaned', self.__at.win.hpaned.get_position())
         try:
             fd = open (self.__configuration_file, 'w')
             self.__cfg.write(fd)

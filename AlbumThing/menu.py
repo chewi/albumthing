@@ -9,13 +9,10 @@ from albumthing import AlbumThing
 
 
 class MenuBar(gtk.MenuBar):
-    def __init__(self, about_dialog, preferences_dialog):
+    def __init__(self):
         super(MenuBar, self).__init__()
 
         self.__at = AlbumThing ()
-
-        self.__about_dialog = about_dialog
-        self.__preferences_dialog = preferences_dialog
 
         menu = gtk.Menu()
 
@@ -44,7 +41,7 @@ class MenuBar(gtk.MenuBar):
 
 
     def info_resp(self, widget, string):
-        self.__about_dialog.run()
+        self.__at.win.about_dialog.run()
 
 
     def quit_resp(self, widget, string):
@@ -52,4 +49,4 @@ class MenuBar(gtk.MenuBar):
 
 
     def preferences_resp(self, widget, string):
-        self.__preferences_dialog.run()
+        self.__at.win.preferences_dialog.run()

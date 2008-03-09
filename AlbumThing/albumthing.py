@@ -6,8 +6,8 @@ import os
 import xmmsclient
 from xmmsclient import glib as xmmsglib
 import gobject
-import configuration
 import gtk
+import gettext
 
 
 class AlbumThing(object):
@@ -18,8 +18,11 @@ class AlbumThing(object):
         def __init__(self):
             self.connected = False
             self.xmms = xmmsclient.XMMS('AlbumThing')
-            self.configuration = configuration.Configuration()
+            self.configuration = None
+            self.win = None
+
             self.__connect()
+
             gobject.timeout_add_seconds(1, self.__check_connection)
 
 
@@ -45,18 +48,23 @@ class AlbumThing(object):
             return True
 
 
-        def set_window(self, win):
-            self.win = win
-
-
         def quit(self):
-            self.configuration.save(self.win)
+            self.configuration.save()
             gtk.main_quit()
 
 
     def __init__(self):
         if AlbumThing.__instance is None:
+            from albumwindow import AlbumWindow
+            from configuration import Configuration
+
+            gettext.install('albumthing')
+
             AlbumThing.__instance = AlbumThing.Singleton()
+            AlbumThing.__instance.configuration = Configuration()
+            AlbumThing.__instance.win = AlbumWindow()
+
+            gtk.main()
 
 
     def __getattr__(self, attr):
