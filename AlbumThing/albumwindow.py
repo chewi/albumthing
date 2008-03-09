@@ -44,7 +44,11 @@ class AlbumWindow(gtk.Window):
         self.hpaned.add1(self.album_list)
         self.hpaned.add2(scrolled_playlist)
 
-        self.vbox.pack_start(menu.MenuBar(), expand=False)
+        self.menu_bar = menu.MenuBar()
+        self.add_accel_group(self.menu_bar.accel_group)
+
+        self.vbox.pack_start(self.menu_bar.item_factory.get_widget('<main>'),
+                expand=False)
         self.vbox.pack_start(self.controls, expand=False)
         self.vbox.pack_start(self.hpaned)
 

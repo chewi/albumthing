@@ -8,36 +8,23 @@ import gtk
 from albumthing import AlbumThing
 
 
-class MenuBar(gtk.MenuBar):
+class MenuBar:
     def __init__(self):
-        super(MenuBar, self).__init__()
-
         self.__at = AlbumThing ()
 
-        menu = gtk.Menu()
+        self.menu_items = (
+            (_('/_File'), None, None, 0, '<Branch>'),
+            (_('/_File/_Preferences'), None, self.preferences_resp, 0, None),
+            ('/_File/sep', None, None, 0, '<Seperator>'),
+            (_('/_File/_Quit'), '<control>Q', self.quit_resp, 0, None),
+            (_('/_Help'), None, None, 0, '<Branch>'),
+            (_('/_Help/_About'), None, self.info_resp, 0, None),
+        )
 
-        item = gtk.MenuItem(_('Preferences'))
-        item.connect('activate', self.preferences_resp, None)
-        menu.append(item)
-
-        item = gtk.MenuItem(_('Quit'))
-        item.connect('activate', self.quit_resp, None)
-        menu.append(item)
-
-        file_menu = gtk.MenuItem(_('File'))
-        file_menu.set_submenu(menu)
-
-        menu = gtk.Menu()
-
-        item = gtk.MenuItem(_('Info'))
-        item.connect('activate', self.info_resp, None)
-        menu.append(item)
-
-        help_menu = gtk.MenuItem(_('Help'))
-        help_menu.set_submenu(menu)
-
-        self.append(file_menu)
-        self.append(help_menu)
+        self.accel_group = gtk.AccelGroup()
+        self.item_factory = gtk.ItemFactory(gtk.MenuBar, '<main>',
+                self.accel_group)
+        self.item_factory.create_items(self.menu_items)
 
 
     def info_resp(self, widget, string):
