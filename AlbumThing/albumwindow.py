@@ -52,6 +52,11 @@ class AlbumWindow(gtk.Window):
         self.vbox.pack_start(self.controls, expand=False)
         self.vbox.pack_start(self.hpaned)
 
+        accel_group = gtk.AccelGroup()
+        accel_group.connect_group(ord('L'), gtk.gdk.CONTROL_MASK,
+                gtk.ACCEL_VISIBLE, self.focus_filter_entry)
+        self.add_accel_group(accel_group)
+
         self.set_default_size(int(self.__at.configuration.get('win', 'width')),
                 int(self.__at.configuration.get('win', 'height')))
 
@@ -112,6 +117,10 @@ class AlbumWindow(gtk.Window):
         self.album_list.set_sensitive(sens)
         self.playlist.set_sensitive(sens)
         self.controls.set_sensitive(sens)
+
+
+    def focus_filter_entry(self, accel_group, acceleratable, keyval, modifier):
+        self.album_list.filter_entry.grab_focus()
 
 
     def destroy(self, widget, data=None):
