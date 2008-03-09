@@ -33,6 +33,8 @@ class AlbumWindow(gtk.Window):
         self.preferences_dialog = preferencesdialog.PreferencesDialog(self)
 
         self.hpaned = gtk.HPaned()
+        self.hpaned.set_position(
+                int(self.__at.configuration.get('win', 'pos_hpaned')))
 
         scrolled_playlist = gtk.ScrolledWindow()
         scrolled_playlist.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
@@ -46,6 +48,14 @@ class AlbumWindow(gtk.Window):
             self.about_dialog, self.preferences_dialog), expand=False)
         self.vbox.pack_start(self.controls, expand=False)
         self.vbox.pack_start(self.hpaned)
+
+        self.set_default_size(int(self.__at.configuration.get('win', 'width')),
+                int(self.__at.configuration.get('win', 'height')))
+
+        x = int(self.__at.configuration.get('win', 'pos_x'))
+        y = int(self.__at.configuration.get('win', 'pos_y'))
+        if x and y:
+            self.move(x, y)
 
         gobject.timeout_add_seconds(1, self.__check_connection)
 
@@ -102,8 +112,7 @@ class AlbumWindow(gtk.Window):
 
 
     def destroy(self, widget, data=None):
-        self.__at.configuration.save()
-        gtk.main_quit()
+        self.__at.quit()
 
 
     def setup_callbacks(self):

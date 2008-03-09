@@ -7,6 +7,7 @@ import xmmsclient
 from xmmsclient import glib as xmmsglib
 import gobject
 import configuration
+import gtk
 
 
 class AlbumThing(object):
@@ -42,6 +43,15 @@ class AlbumThing(object):
             if not self.connected:
                 self.__connect()
             return True
+
+
+        def set_window(self, win):
+            self.win = win
+
+
+        def quit(self):
+            self.configuration.save(self.win)
+            gtk.main_quit()
 
 
     def __init__(self):

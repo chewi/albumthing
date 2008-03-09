@@ -21,15 +21,19 @@ class Configuration:
             self.__cfg.set('ui', 'show_cover_art', '1')
             self.__cfg.set('ui', 'show_alternative_cover_art', '0')
             self.__cfg.set('ui', 'combine_va_albums', '0')
+            self.__cfg.add_section('win')
+            self.__cfg.set('win', 'width', 500)
+            self.__cfg.set('win', 'height', 600)
+            self.__cfg.set('win', 'pos_x', 0)
+            self.__cfg.set('win', 'pos_y', 0)
+            self.__cfg.set('win', 'pos_hpaned', 160)
 
 
     def get(self, section, var):
         try:
             ret = self.__cfg.get (section, var)
-            if ret == '1':
-                ret = True
-            elif ret == '0':
-                ret = False
+            if ret == '0':
+                ret = 0
         except:
             ret = None
 
@@ -40,7 +44,16 @@ class Configuration:
         self.__cfg.set(section, var, value)
 
 
-    def save(self):
+    def save(self, win):
+        try:
+            self.__cfg.add_section('win')
+        except ConfigParser.DuplicateSectionError:
+            pass
+        self.__cfg.set('win', 'width', win.get_size()[0])
+        self.__cfg.set('win', 'height', win.get_size()[1])
+        self.__cfg.set('win', 'pos_x', win.get_position()[0])
+        self.__cfg.set('win', 'pos_y', win.get_position()[1])
+        self.__cfg.set('win', 'pos_hpaned', win.hpaned.get_position())
         try:
             fd = open (self.__configuration_file, 'w')
             self.__cfg.write(fd)

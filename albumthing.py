@@ -15,5 +15,5 @@ if __name__ == '__main__':
 
     AlbumThing()
 
-    win = albumwindow.AlbumWindow()
+    AlbumThing().set_window(albumwindow.AlbumWindow())
     gtk.main()
