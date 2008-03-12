@@ -55,6 +55,8 @@ class AlbumWindow(gtk.Window):
         accel_group = gtk.AccelGroup()
         accel_group.connect_group(ord('L'), gtk.gdk.CONTROL_MASK,
                 gtk.ACCEL_VISIBLE, self.focus_filter_entry)
+        accel_group.connect_group(ord('M'), gtk.gdk.CONTROL_MASK,
+                gtk.ACCEL_VISIBLE, self.album_list.album_list.random_album)
         self.add_accel_group(accel_group)
 
         self.set_default_size(int(self.__at.configuration.get('win', 'width')),

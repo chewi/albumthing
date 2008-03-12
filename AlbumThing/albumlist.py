@@ -8,6 +8,7 @@ import gtk
 import gobject
 from gobject import markup_escape_text
 from xmmsclient import collections as xc
+import xmmsclient
 import operator
 from album import Album
 from albumthing import AlbumThing
@@ -65,6 +66,8 @@ class AlbumList(gtk.TreeView):
         self.__ids = 0
         self.__at = AlbumThing ()
 
+        self.num_albums = 0
+
         self.set_headers_visible(False)
         self.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
 
@@ -117,6 +120,7 @@ class AlbumList(gtk.TreeView):
             return cmp(a1['album'].lower(), a2['album'].lower())
 
         self.list_store.clear()
+        self.num_albums = 0
         combine = self.__at.configuration.get('ui', 'combine_va_albums')
         duration = 0
         last_album = None
@@ -136,6 +140,7 @@ class AlbumList(gtk.TreeView):
             else:
                 if album:
                     self.add_album(album)
+                    self.num_albums = self.num_albums + 1
                 album = Album(self, song['album'],
                         song['artist'], song['picture_front'], 1,
                         song['duration'])
@@ -144,6 +149,19 @@ class AlbumList(gtk.TreeView):
             last_artist = song['artist']
 
         self.add_album(album)
+        self.num_albums = self.num_albums + 1
+
+
+    def __xmms_cb_playback_status(self, result):
+        print 'stat: %s' % result.value()
+        if result.value() == xmmsclient.PLAYBACK_STATUS_STOP:
+            print 'next'
+
+
+    def __xmms_cb_current_pos(self, result):
+        print 'pos: %s' % result.value()
+        if result.value() == 0:
+            self.__at.xmms.playback_status(cb=self.__xmms_cb_playback_status)
 
 
     def __gtk_cb_selection_changed(self, selection, user_data):
@@ -249,7 +267,20 @@ class AlbumList(gtk.TreeView):
                 cb=self.__xmms_cb_song_list)
 
 
+    def random_album(self, accel_group=None, acceleratable=None, keyval=None,
+            modifier=None):
+        import random
+
+        r = random.randint(0, self.num_albums)
+        self.get_selection().unselect_all()
+        self.get_selection().select_iter(
+                self.list_store.get_iter_from_string('%d:' % r))
+        self.scroll_to_cell('%d:' % r)
+
+
     def setup_callbacks(self):
         self.__at.xmms.coll_query_infos(xc.Universe(),
                 ['id', 'album', 'artist', 'duration', 'picture_front'],
                 cb=self.__xmms_cb_song_list)
+        self.__at.xmms.broadcast_playlist_current_pos(
+                cb=self.__xmms_cb_current_pos)
