@@ -184,8 +184,8 @@ class AlbumList(gtk.TreeView):
 
        coll = xc.Union(*colls)
        self.__at.xmms.playlist_clear('_album')
-       self.__at.xmms.playlist_add_collection(coll, playlist='_album')
-       self.__at.xmms.playlist_sort(['tracknr'], playlist='_album')
+       self.__at.xmms.playlist_add_collection(coll, order=['album', 'tracknr'],
+               playlist='_album')
        self.__at.xmms.playlist_load('_album')
 
 
