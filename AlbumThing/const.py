@@ -16,3 +16,4 @@ DESC = _('A simple XMMS2 client')
 
 UNKNOWN = _('Unknown')
 COVER_SIZE = 40
+PLAYLIST_NAME = '_album'

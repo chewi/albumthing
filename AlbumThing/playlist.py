@@ -118,9 +118,9 @@ class PlayList(gtk.TreeView):
 
     def __xmms_cb_playlist_list(self, result):
         for playlist in result.value():
-            if playlist == '_album':
+            if playlist == PLAYLIST_NAME:
                 return
-        self.__at.xmms.playlist_create('_album')
+        self.__at.xmms.playlist_create(PLAYLIST_NAME)
 
 
     def __gtk_cb_row_activated(self, treeview, path, column, user_data):

@@ -196,10 +196,10 @@ class AlbumList(gtk.TreeView):
                    colls.append(xc.Equals(field='album', value=album))
 
        coll = xc.Union(*colls)
-       self.__at.xmms.playlist_clear('_album')
+       self.__at.xmms.playlist_clear(PLAYLIST_NAME)
        self.__at.xmms.playlist_add_collection(coll, order=['album', 'tracknr'],
-               playlist='_album')
-       self.__at.xmms.playlist_load('_album')
+               playlist=PLAYLIST_NAME)
+       self.__at.xmms.playlist_load(PLAYLIST_NAME)
 
 
     def __increase_ids(self):
