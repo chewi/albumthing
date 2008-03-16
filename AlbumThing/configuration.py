@@ -26,11 +26,11 @@ class Configuration:
             self.__cfg.set('ui', 'show_alternative_cover_art', '0')
             self.__cfg.set('ui', 'combine_va_albums', '0')
             self.__cfg.add_section('win')
-            self.__cfg.set('win', 'width', 500)
-            self.__cfg.set('win', 'height', 600)
-            self.__cfg.set('win', 'pos_x', 0)
-            self.__cfg.set('win', 'pos_y', 0)
-            self.__cfg.set('win', 'pos_hpaned', 160)
+            self.__cfg.set('win', 'width', '500')
+            self.__cfg.set('win', 'height', '600')
+            self.__cfg.set('win', 'pos_x', '0')
+            self.__cfg.set('win', 'pos_y', '0')
+            self.__cfg.set('win', 'pos_hpaned', '160')
 
 
     def get(self, section, var):
