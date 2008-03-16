@@ -24,7 +24,7 @@ class Configuration:
             self.__cfg.add_section('ui')
             self.__cfg.set('ui', 'show_cover_art', '1')
             self.__cfg.set('ui', 'show_alternative_cover_art', '0')
-            self.__cfg.set('ui', 'combine_va_albums', '0')
+            self.__cfg.set('ui', 'combine_va_albums', '1')
             self.__cfg.add_section('win')
             self.__cfg.set('win', 'width', '500')
             self.__cfg.set('win', 'height', '600')
