@@ -31,6 +31,8 @@ class Configuration:
             self.__cfg.set('win', 'pos_x', '0')
             self.__cfg.set('win', 'pos_y', '0')
             self.__cfg.set('win', 'pos_hpaned', '160')
+            self.__cfg.add_section('behaviour')
+            self.__cfg.set('behaviour', 'random_album', '0')
 
 
     def get(self, section, var):

@@ -70,7 +70,6 @@ class PlayList(gtk.TreeView):
         self.list_store.clear()
         for id in result.value():
             self.__at.xmms.medialib_get_info(id, cb=self.__xmms_cb_id_info)
-        self.__at.xmms.playlist_current_pos(cb=self.__xmms_cb_current_pos)
         self.__at.xmms.playback_status(cb=self.__xmms_cb_playback_status)
 
 
@@ -114,6 +113,7 @@ class PlayList(gtk.TreeView):
         elif status == xmmsclient.PLAYBACK_STATUS_STOP:
             self.__status = gtk.STOCK_MEDIA_STOP
         self.set_active(self.__playlist_pos)
+        self.__at.xmms.playlist_current_pos(cb=self.__xmms_cb_current_pos)
 
 
     def __xmms_cb_playlist_list(self, result):
@@ -154,6 +154,7 @@ class PlayList(gtk.TreeView):
             self.list_store.set_value(iter, 0, None)
             if pos == i:
                 self.list_store.set_value(iter, 0, self.__status)
+                break
             i = i + 1
             iter = self.list_store.iter_next(iter)
 

@@ -153,15 +153,10 @@ class AlbumList(gtk.TreeView):
 
 
     def __xmms_cb_playback_status(self, result):
-        print 'stat: %s' % result.value()
-        if result.value() == xmmsclient.PLAYBACK_STATUS_STOP:
-            print 'next'
-
-
-    def __xmms_cb_current_pos(self, result):
-        print 'pos: %s' % result.value()
-        if result.value() == 0:
-            self.__at.xmms.playback_status(cb=self.__xmms_cb_playback_status)
+        if result.value() == xmmsclient.PLAYBACK_STATUS_STOP and \
+                self.__at.configuration.get('behaviour', 'random_album'):
+            self.random_album()
+            self.__at.xmms.playback_start()
 
 
     def __gtk_cb_selection_changed(self, selection, user_data):
@@ -267,8 +262,7 @@ class AlbumList(gtk.TreeView):
                 cb=self.__xmms_cb_song_list)
 
 
-    def random_album(self, accel_group=None, acceleratable=None, keyval=None,
-            modifier=None):
+    def random_album(self):
         import random
 
         r = random.randint(0, self.num_albums)
@@ -282,5 +276,5 @@ class AlbumList(gtk.TreeView):
         self.__at.xmms.coll_query_infos(xc.Universe(),
                 ['id', 'album', 'artist', 'duration', 'picture_front'],
                 cb=self.__xmms_cb_song_list)
-        self.__at.xmms.broadcast_playlist_current_pos(
-                cb=self.__xmms_cb_current_pos)
+        self.__at.xmms.broadcast_playback_status(
+                cb=self.__xmms_cb_playback_status)

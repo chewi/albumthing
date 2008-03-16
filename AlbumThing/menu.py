@@ -17,6 +17,9 @@ class MenuBar:
             (_('/_File/_Preferences'), None, self.preferences_resp, 0, None),
             ('/_File/sep', None, None, 0, '<Separator>'),
             (_('/_File/_Quit'), '<control>Q', self.quit_resp, 0, None),
+            (_('/_Control'), None, None, 0, '<Branch>'),
+            (_('/_Control/Select _Random Album'), '<control>M',
+                self.rand_resp, 0, None),
             (_('/_Help'), None, None, 0, '<Branch>'),
             (_('/_Help/_About'), None, self.info_resp, 0, None),
         )
@@ -37,3 +40,7 @@ class MenuBar:
 
     def preferences_resp(self, widget, string):
         self.__at.win.preferences_dialog.run()
+
+
+    def rand_resp(self, widget, string):
+        self.__at.win.album_list.album_list.random_album()
