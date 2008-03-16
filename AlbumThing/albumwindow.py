@@ -65,7 +65,10 @@ class AlbumWindow(gtk.Window):
         if x and y:
             self.move(x, y)
 
-        gobject.timeout_add_seconds(1, self.__check_connection)
+        if gobject.glib_version >= (2, 14, 0):
+            gobject.timeout_add_seconds(1, self.__check_connection)
+        else:
+            gobject.timeout_add(1000, self.__check_connection)
 
         self.add(self.vbox)
         self.connect('destroy', self.destroy)
