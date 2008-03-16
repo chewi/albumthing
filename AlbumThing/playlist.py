@@ -154,7 +154,6 @@ class PlayList(gtk.TreeView):
             self.list_store.set_value(iter, 0, None)
             if pos == i:
                 self.list_store.set_value(iter, 0, self.__status)
-                break
             i = i + 1
             iter = self.list_store.iter_next(iter)
 
