@@ -23,9 +23,9 @@ class AlbumThing(object):
 
             self.__connect()
 
-            if gobject.glib_version >= (2, 14, 0):
+            try:
                 gobject.timeout_add_seconds(1, self.__check_connection)
-            else:
+            except AttributeError:
                 gobject.timeout_add(1000, self.__check_connection)
 
 

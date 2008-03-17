@@ -31,9 +31,9 @@ class SeekBar(gtk.VBox):
 
         self.scale.connect('change-value', self.__gtk_cb_change_value, None)
 
-        if gobject.glib_version >= (2, 14, 0):
+        try:
             gobject.timeout_add_seconds(1, self.__poll_playtime)
-        else:
+        except AttributeError:
             gobject.timeout_add(1000, self.__poll_playtime)
 
 
