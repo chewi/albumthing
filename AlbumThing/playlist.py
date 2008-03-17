@@ -96,8 +96,7 @@ class PlayList(gtk.TreeView):
         elif res['type'] == xmmsclient.PLAYLIST_CHANGED_CLEAR:
             self.list_store.clear()
         elif res['type'] == xmmsclient.PLAYLIST_CHANGED_MOVE:
-            # FIXME: Let's see
-            pass
+            self.move_entry(res['position'], res['newposition'])
         elif res['type'] == xmmsclient.PLAYLIST_CHANGED_SORT:
             self.__at.xmms.playlist_list_entries(cb=self.__xmms_cb_entry_list)
         elif res['type'] == xmmsclient.PLAYLIST_CHANGED_SHUFFLE:
@@ -145,6 +144,12 @@ class PlayList(gtk.TreeView):
                 break
             i = i + 1
             iter = self.list_store.iter_next(iter)
+
+
+    def move_entry(self, pos, new_pos):
+        iter_old = self.list_store.get_iter_from_string('%d:' % pos)
+        iter_new = self.list_store.get_iter_from_string('%d:' % new_pos)
+        self.list_store.move_after(iter_old, iter_new)
 
 
     def set_active(self, pos):
