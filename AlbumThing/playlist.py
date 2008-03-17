@@ -48,23 +48,7 @@ class PlayList(gtk.TreeView):
 
 
     def __xmms_cb_id_info(self, result):
-        if not result.value():
-            return
-
-        try:
-            artist = result.value()['artist']
-        except KeyError:
-            artist = const.UNKNOWN
-        try:
-            title = result.value()['title']
-        except KeyError:
-            title = '%s (%s)' % (const.UNKNOWN, result.value()['url'])
-        try:
-            album = result.value()['album']
-        except KeyError:
-            album = const.UNKNOWN
-        self.add_entry(result.value()['id'], artist, title, album)
-
+        self.__insert_media_info_result(-1, result)
 
     def __xmms_cb_entry_list(self, result):
         self.list_store.clear()
@@ -88,9 +72,7 @@ class PlayList(gtk.TreeView):
             self.__at.xmms.medialib_get_info(res['id'],
                     cb=self.__xmms_cb_id_info)
         elif res['type'] == xmmsclient.PLAYLIST_CHANGED_INSERT:
-            # FIXME: How do we remember the playlist position upon getting
-            #        the media info?
-            pass
+            self.insert_entry_by_id(res['position'], res['id'])
         elif res['type'] == xmmsclient.PLAYLIST_CHANGED_REMOVE:
             self.remove_entry(res['position'])
         elif res['type'] == xmmsclient.PLAYLIST_CHANGED_CLEAR:
@@ -128,8 +110,27 @@ class PlayList(gtk.TreeView):
         self.__at.xmms.playback_tickle()
 
 
-    def add_entry(self, id, artist, title, album):
-        self.list_store.append([None,
+    def __insert_media_info_result(self, pos, result):
+        if not result.value():
+            return
+
+        try:
+            artist = result.value()['artist']
+        except KeyError:
+            artist = const.UNKNOWN
+        try:
+            title = result.value()['title']
+        except KeyError:
+            title = '%s (%s)' % (const.UNKNOWN, result.value()['url'])
+        try:
+            album = result.value()['album']
+        except KeyError:
+            album = const.UNKNOWN
+        self.insert_entry(pos, result.value()['id'], artist, title, album)
+
+
+    def insert_entry(self, pos, id, artist, title, album):
+        self.list_store.insert(pos, [None,
             '<b>%s</b>\n<small>by</small> %s <small>from</small> %s' %
             (markup_escape_text(title), markup_escape_text(artist),
                 markup_escape_text(album)), id, title])
@@ -161,6 +162,13 @@ class PlayList(gtk.TreeView):
                 self.list_store.set_value(iter, 0, self.__status)
             i = i + 1
             iter = self.list_store.iter_next(iter)
+
+
+    def insert_entry_by_id(self, pos, id):
+        def xmms_cb_id_info(result):
+            self.__insert_media_info_result(pos, result)
+
+        self.__at.xmms.medialib_get_info(id, cb=xmms_cb_id_info)
 
 
     def setup_callbacks(self):
