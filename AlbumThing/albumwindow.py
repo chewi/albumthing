@@ -68,7 +68,6 @@ class AlbumWindow(gtk.Window):
         self.add(self.vbox)
         self.connect('destroy', self.destroy)
         self.show_all()
-        self.playlist.active_playlist_button.hide()
 
 
     def __xmms_cb_id_info(self, result):

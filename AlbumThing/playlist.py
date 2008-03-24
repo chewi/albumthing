@@ -39,6 +39,7 @@ class PlayListThing(gtk.VBox):
 
     def __xmms_cb_playlist_current_active(self, result):
         self.__active = result.value()
+        self.active_playlist_button.hide()
 
 
     def __xmms_cb_current_pos(self, result):
