@@ -26,7 +26,7 @@ class AlbumWindow(gtk.Window):
         self.set_title('Album')
 
         self.album_list = albumlist.AlbumListThing()
-        self.playlist = playlist.PlayList()
+        self.playlist = playlist.PlayListThing()
         self.controls = controls.AlbumControls()
         self.vbox = gtk.VBox(homogeneous=False, spacing=8)
         self.about_dialog = aboutdialog.AboutDialog()
@@ -36,13 +36,8 @@ class AlbumWindow(gtk.Window):
         self.hpaned.set_position(
                 int(self.__at.configuration.get('win', 'pos_hpaned')))
 
-        scrolled_playlist = gtk.ScrolledWindow()
-        scrolled_playlist.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        scrolled_playlist.set_shadow_type(gtk.SHADOW_IN)
-        scrolled_playlist.add(self.playlist)
-
         self.hpaned.add1(self.album_list)
-        self.hpaned.add2(scrolled_playlist)
+        self.hpaned.add2(self.playlist)
 
         self.menu_bar = menu.MenuBar()
         self.add_accel_group(self.menu_bar.accel_group)
@@ -73,6 +68,7 @@ class AlbumWindow(gtk.Window):
         self.add(self.vbox)
         self.connect('destroy', self.destroy)
         self.show_all()
+        self.playlist.active_playlist_button.hide()
 
 
     def __xmms_cb_id_info(self, result):

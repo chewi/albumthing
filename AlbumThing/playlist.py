@@ -12,6 +12,70 @@ from albumthing import AlbumThing
 import const
 
 
+class PlayListThing(gtk.VBox):
+    def __init__(self):
+        super(PlayListThing, self).__init__(homogeneous=False, spacing=4)
+
+        self.__at = AlbumThing ()
+
+        self.__active = None
+
+        self.active_playlist_button = gtk.Button(_('Show active playlist'),
+                gtk.STOCK_GO_BACK)
+        self.active_playlist_button.set_relief(gtk.RELIEF_NONE)
+        self.pack_start(self.active_playlist_button, expand=False)
+
+        self.playlist = PlayList()
+
+        scrolled_playlist = gtk.ScrolledWindow()
+        scrolled_playlist.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        scrolled_playlist.set_shadow_type(gtk.SHADOW_IN)
+        scrolled_playlist.add(self.playlist)
+        self.pack_start(scrolled_playlist)
+
+        self.active_playlist_button.connect('clicked',
+                self.__gtk_cb_button_clicked, None)
+
+
+    def __xmms_cb_playlist_current_active(self, result):
+        self.__active = result.value()
+
+
+    def __xmms_cb_current_pos(self, result):
+        self.__at.xmms.playlist_current_active(
+                cb=self.__xmms_cb_playlist_current_active)
+
+
+    def __gtk_cb_button_clicked(self, button, user_data):
+        self.recover_active()
+
+
+    def load_coll(self, coll):
+        if self.__active == const.PLAYLIST_NAME1:
+            pls = const.PLAYLIST_NAME2
+        else:
+            pls = const.PLAYLIST_NAME1
+        self.__at.xmms.playlist_clear(pls)
+        self.__at.xmms.playlist_add_collection(coll, order=['album', 'tracknr'],
+                playlist=pls)
+        self.__at.xmms.playlist_load(pls)
+
+        self.active_playlist_button.show()
+
+
+    def recover_active(self):
+        self.active_playlist_button.hide()
+        self.__at.xmms.playlist_load(self.__active)
+
+
+    def setup_callbacks(self):
+        self.playlist.setup_callbacks()
+        self.__at.xmms.playlist_current_active(
+                cb=self.__xmms_cb_playlist_current_active)
+        self.__at.xmms.broadcast_playlist_current_pos(
+                cb=self.__xmms_cb_current_pos)
+
+
 class PlayList(gtk.TreeView):
     def __init__(self):
         super(PlayList, self).__init__()
@@ -98,10 +162,18 @@ class PlayList(gtk.TreeView):
 
 
     def __xmms_cb_playlist_list(self, result):
+        p1 = False
+        p2 = False
         for playlist in result.value():
-            if playlist == const.PLAYLIST_NAME:
-                return
-        self.__at.xmms.playlist_create(const.PLAYLIST_NAME)
+            if playlist == const.PLAYLIST_NAME1:
+                p1 = True
+            elif playlist == const.PLAYLIST_NAME2:
+                p2 = True
+
+        if not p1:
+            self.__at.xmms.playlist_create(const.PLAYLIST_NAME1)
+        if not p2:
+            self.__at.xmms.playlist_create(const.PLAYLIST_NAME2)
 
 
     def __gtk_cb_row_activated(self, treeview, path, column, user_data):
