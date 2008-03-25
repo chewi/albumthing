@@ -32,7 +32,7 @@ msgstr "Unbekannt"
 msgid ""
 "<b>No info found</b>\n"
 "I blame xmms2"
-msgstr "Ich gebe xmms2 die Schuld"
+msgstr "<b>Keine Informationen gefunden</b>\nXMMS2 hat Schuld"
 
 #: ../AlbumThing/menu.py:16
 msgid "/_File"
