@@ -1,5 +1,7 @@
 include *.py
 include COPYING
+include README
+include INSTALL
 recursive-include AlbumThing *.py
 recursive-include data *
 recursive-include po *.po
