@@ -1,0 +1,504 @@
+2008-03-25  Sebastian Sareyko  <public@nooms.de>
+
+	* INSTALL, README:
+	INSTALL and README added
+	[bb45cf9b2043] [tip]
+
+	* AlbumThing/albumlist.py, AlbumThing/playlist.py:
+	Don't make AlbumThing go berserk on album change
+	[88c512803730]
+
+	* po/de.po:
+	German translation updated
+	[ae1f1e4c85b0]
+
+	* AlbumThing/albumthing.py, AlbumThing/menu.py, po/albumthing.pot,
+	po/de.po:
+	German translation updated
+	[86b581d6eab5]
+
+	* AlbumThing/preferencesdialog.py:
+	Split preferences dialog in categories
+	[a89c16a383c5]
+
+	* AlbumThing/album.py, AlbumThing/albumlist.py,
+	AlbumThing/albumwindow.py, AlbumThing/configuration.py,
+	AlbumThing/controls.py, AlbumThing/menu.py, AlbumThing/playlist.py,
+	AlbumThing/preferencesdialog.py:
+	Unecessary whitespace removed
+	[63962fb0f045]
+
+	* AlbumThing/albumwindow.py:
+	Accessing the playlist liststore changed
+	[21b2f1994474]
+
+2008-03-24  Sebastian Sareyko  <public@nooms.de>
+
+	* AlbumThing/albumwindow.py, AlbumThing/playlist.py:
+	Better hide the back button when the active (as in our "active", not
+	the xmms2 one) playlist changes
+	[448b36728698]
+
+	* AlbumThing/albumlist.py, AlbumThing/albumwindow.py,
+	AlbumThing/const.py, AlbumThing/playlist.py:
+	"Back" button added
+	[dd4ec03e67bd]
+
+2008-03-17  Sebastian Sareyko  <public@nooms.de>
+
+	* AlbumThing/playlist.py:
+	Handle palylist insert events
+	[d1ac78052060]
+
+	* AlbumThing/playlist.py:
+	Update the playlist when entries move around
+	[b0836eca8668]
+
+	* AlbumThing/albumthing.py, AlbumThing/albumwindow.py,
+	AlbumThing/controls.py:
+	Hopefully fixed the timeout_add issue with older versions of glib
+	[25db2e2eb96f]
+
+2008-03-16  Sebastian Sareyko  <public@nooms.de>
+
+	* AlbumThing/playlist.py:
+	Another whoops, better don't break there
+	[7472c4cf27f3]
+
+	* AlbumThing/albumlist.py, AlbumThing/playlist.py:
+	Oops, forget the const.
+	[76e51395cd76]
+
+	* AlbumThing/albumthing.py, AlbumThing/albumwindow.py,
+	AlbumThing/controls.py:
+	Use timeout_add instead of timeout_add_seconds if we run on an older
+	glib
+	[a54e6796e48f]
+
+	* AlbumThing/albumlist.py, AlbumThing/const.py,
+	AlbumThing/playlist.py:
+	Better make our playlist name a 'constant'
+	[33656b43021d]
+
+	* AlbumThing/albumlist.py, AlbumThing/albumwindow.py,
+	AlbumThing/configuration.py, AlbumThing/menu.py,
+	AlbumThing/playlist.py:
+	Random album foo added
+	[c1fbb85d19c1]
+
+	* AlbumThing/configuration.py:
+	Better check the combine option by default
+	[de28da8a3eda]
+
+	* AlbumThing/configuration.py:
+	Configuration stuff fixed
+	[50e2c371b7a8]
+
+2008-03-12  Sebastian Sareyko  <public@nooms.de>
+
+	* AlbumThing/albumlist.py, AlbumThing/albumwindow.py:
+	Working on selecting random albums.
+	[c759f9076687]
+
+	* AlbumThing/menu.py:
+	Bah, who made me do this?
+	[1d0dbea766a6]
+
+	* AlbumThing/albumlist.py:
+	Better order the playlist in a sane way
+	[5b92e27a0878]
+
+2008-03-11  Sebastian Sareyko  <public@nooms.de>
+
+	* AlbumThing/albumthing.py:
+	Do not try to access the configuration when it is not there
+	[f1b42bf53e66]
+
+2008-03-09  Sebastian Sareyko  <public@nooms.de>
+
+	* AlbumThing/albumwindow.py:
+	Made Ctrl+L focus the filter entry
+	[85cb29b00d1f]
+
+	* po/albumthing.pot, po/de.po:
+	Translation updated
+	[303d1e141952]
+
+	* AlbumThing/albumwindow.py, AlbumThing/menu.py:
+	Better use gtk.ItemFactory for menus
+	[f731fc86723e]
+
+	* AlbumThing/albumthing.py, AlbumThing/albumwindow.py,
+	AlbumThing/configuration.py, AlbumThing/menu.py, albumthing.py:
+	Structural changes
+	[42b953870fd8]
+
+	* AlbumThing/albumthing.py, AlbumThing/albumwindow.py,
+	AlbumThing/configuration.py, AlbumThing/menu.py, albumthing.py:
+	Remember window size, position, etc.
+	[2f324dbb696d]
+
+2008-03-08  Sebastian Sareyko  <public@nooms.de>
+
+	* AlbumThing/albumthing.py, AlbumThing/menu.py:
+	Got rid of some redundant code
+	[74275245d450]
+
+	* po/albumthing.pot, po/de.po:
+	Translation updated
+	[e2e03b84161b]
+
+	* AlbumThing/albumlist.py:
+	Ignore case on comparing album names
+	[3aced5866fff]
+
+	* AlbumThing/album.py, AlbumThing/albumlist.py,
+	AlbumThing/configuration.py, AlbumThing/preferencesdialog.py:
+	Added an option to combine albums with multiple artists
+	[343ff5c357e4]
+
+	* AlbumThing/aboutdialog.py:
+	Added authors email address
+	[b23e27e0b0e9]
+
+	* AlbumThing/const.py:
+	Project URL fixed
+	[81a0c9a15b91]
+
+	* AlbumThing/albumlist.py:
+	Automatically resize the name column
+	[d0c467e1a0d6]
+
+	* .hgtags:
+	Added tag 0.1 for changeset 20e502785b5e
+	[10ca45fe6dff]
+
+2008-03-05  Sebastian Sareyko  <public@nooms.de>
+
+	* .hgignore, MANIFEST.in:
+	MANIFEST.in added
+	[20e502785b5e] [0.1]
+
+	* AlbumThing/const.py:
+	Bump version number
+	[d6917d2c1818]
+
+	* po/de.po:
+	Crappy Umlauts don't work
+	[3ecd37d006b0]
+
+	* AlbumThing/const.py, albumthing.py, setup.py:
+	Watch out for the case!
+	[a9256a70f408]
+
+	* po/albumthing.pot, po/de.po:
+	Updated the po files
+	[ccd55ad34679]
+
+	* AlbumThing/albumlist.py, AlbumThing/albumwindow.py,
+	AlbumThing/const.py, AlbumThing/controls.py, AlbumThing/playlist.py,
+	AlbumThing/preferencesdialog.py:
+	I18N madness
+	[f04861781de1]
+
+	* AlbumThing/aboutdialog.py, AlbumThing/const.py:
+	Oops, better do it this way
+	[dbb71dc71e4b]
+
+	* AlbumThing/aboutdialog.py, AlbumThing/const.py, setup.py:
+	Even more constants added
+	[11df5667f9ed]
+
+	* AlbumThing/aboutdialog.py, AlbumThing/const.py, setup.py:
+	Added a file for constants like version number
+	[9d75a41fe428]
+
+	* .hgignore, AlbumThing/menu.py, albumthing.py, po/albumthing.pot,
+	po/de.po, setup.py:
+	gettext support started
+	[ea06650da32d]
+
+2008-03-04  Sebastian Sareyko  <public@nooms.de>
+
+	* AlbumThing/playlist.py:
+	Better autosize playlist columns as well
+	[c1bb4501f91a]
+
+	* data/AlbumThing.desktop, setup.py:
+	Added a .desktop file
+	[fb391d9a9eae]
+
+	* .hgignore, AlbumThing/__init__.py, AlbumThing/aboutdialog.py,
+	AlbumThing/album.py, AlbumThing/albumlist.py,
+	AlbumThing/albumthing.py, AlbumThing/albumwindow.py,
+	AlbumThing/configuration.py, AlbumThing/controls.py,
+	AlbumThing/coverart.py, AlbumThing/menu.py, AlbumThing/playlist.py,
+	AlbumThing/preferencesdialog.py, album.py, album/__init__.py,
+	album/aboutdialog.py, album/album.py, album/albumlist.py,
+	album/albumthing.py, album/albumwindow.py, album/configuration.py,
+	album/controls.py, album/coverart.py, album/menu.py,
+	album/playlist.py, album/preferencesdialog.py, albumthing.py,
+	setup.py:
+	setup.py added and some filenames changed
+	[fab0dc22c2b3]
+
+	* album/albumlist.py:
+	Autosize the cover art column
+	[93ff8cd3571e]
+
+2008-03-03  Sebastian Sareyko  <public@nooms.de>
+
+	* album/albumlist.py, album/albumwindow.py, album/controls.py,
+	album/playlist.py:
+	Better be careful with the callbacks
+	[74319fc04a53]
+
+2008-03-02  Sebastian Sareyko  <public@nooms.de>
+
+	* album/albumthing.py:
+	Automatically start xmms2d if requested
+	[6cd29c2d4f0b]
+
+	* album/albumlist.py, album/preferencesdialog.py:
+	Update the album list upon configuration change
+	[007fd9de9db3]
+
+	* album/album.py, album/albumthing.py, album/albumwindow.py,
+	album/configuration.py, album/menu.py, album/preferencesdialog.py:
+	Load and save the configuration
+	[afd455e9e506]
+
+	* album/albumwindow.py, album/menu.py, album/preferencesdialog.py:
+	Preferences dialog added. Not functional yet, though
+	[1c2bb83841c1]
+
+	* album/aboutdialog.py, album/menu.py:
+	Some small changes
+	[3ba9e5629e6b]
+
+	* album/aboutdialog.py, album/albumthing.py, album/albumwindow.py,
+	album/menu.py:
+	Added an AboutDialog
+	[316217001e8e]
+
+	* album/albumlist.py:
+	Playing with the signals
+	[31c8b325b0cb]
+
+2008-02-29  Sebastian Sareyko  <public@nooms.de>
+
+	* album/albumlist.py, album/albumwindow.py:
+	Focus the filter entry by default again
+	[0cbebbbc7215]
+
+	* album/controls.py:
+	Made the info-label-text selectable
+	[c396ba43e9dc]
+
+	* album/coverart.py:
+	Only load the cdrom pixbuf once. Rendering the AlbumList is still
+	pretty slow though :(
+	[8fd0aedc7679]
+
+	* album/controls.py:
+	Give credit where credit is due
+	[6a62948ba162]
+
+	* album/albumwindow.py, album/controls.py:
+	Be nice to the widgets
+	[b8b8aa3726d3]
+
+2008-02-26  Sebastian Sareyko  <public@nooms.de>
+
+	* album/album.py, album/albumlist.py, album/controls.py,
+	album/coverart.py:
+	More coverart work
+	[1e6beb2a273b]
+
+	* album/album.py:
+	Show covers again
+	[6015269d6893]
+
+2008-02-24  Sebastian Sareyko  <public@nooms.de>
+
+	* album.py, album/album.py, album/albumlist.py, album/albumthing.py,
+	album/albumwindow.py, album/controls.py, album/playlist.py:
+	Made AlbumThing know whether xmms2d is running or not
+	[3ea84a501553]
+
+	* album/albumwindow.py, album/controls.py, album/playlist.py:
+	Wtf is XMMS2 doing?
+	[082f561818ed]
+
+2008-02-22  Sebastian Sareyko  <public@nooms.de>
+
+	* album/albumlist.py, album/playlist.py:
+	Made interactive search in the playlist work
+	[87c7a53fb5b5]
+
+	* album/albumlist.py, album/controls.py:
+	Removed the album activate thing again + better don't divide by zero
+	[e825ef565868]
+
+	* album/albumlist.py:
+	Better use playlist_add_collection instead of filling the playlist
+	manually
+	[6eb26c536660]
+
+	* album/albumlist.py:
+	Start playing an album on activating its row
+	[ae1deb1a78d9]
+
+	* album/albumlist.py, album/albumwindow.py:
+	Focus the filter entry by default
+	[7bcaee369abb]
+
+	* album/playlist.py:
+	Made interactive searching in the playlist work
+	[e99ab487931e]
+
+	* album/controls.py, album/playlist.py:
+	Doubling the efforts
+	[89e207debe7e]
+
+	* album/playlist.py:
+	Made the playlist more informative
+	[12e047dccd74]
+
+2008-02-20  Sebastian Sareyko  <public@nooms.de>
+
+	* COPYING, album.py, album/album.py, album/albumlist.py,
+	album/albumwindow.py, album/controls.py, album/menu.py,
+	album/playlist.py:
+	Added license stuff
+	[65cd99c5d75e]
+
+	* album/controls.py:
+	Better escape this as well
+	[4b59ef47537a]
+
+	* album/controls.py:
+	Seekbar added
+	[dc2e32dac081]
+
+	* album/albumlist.py, album/albumwindow.py, album/controls.py:
+	Made everything a bit more pertty
+	[30b89c500590]
+
+	* album/controls.py:
+	Show information about the currently playing song
+	[1e46b2ca24cf]
+
+	* album/albumwindow.py:
+	Set the window title
+	[cbf67071d474]
+
+	* album/albumwindow.py, album/controls.py, album/playlist.py:
+	Added some controls
+	[93af4c0d18c4]
+
+2008-02-19  Sebastian Sareyko  <public@nooms.de>
+
+	* album/albumlist.py:
+	Hmm, hmm
+	[cdcb6b5bc756]
+
+	* album/albumlist.py:
+	Show everything if the filter entry is empty
+	[57d0e7b7206f]
+
+	* album/albumlist.py, album/albumwindow.py:
+	Added a filter entry
+	[aaf3846dcf25]
+
+	* album/albumlist.py:
+	Prepared the album list for searching
+	[1290b184533f]
+
+	* album/album.py, album/albumlist.py, album/playlist.py:
+	Changes
+	[5eb9521421a0]
+
+	* album/album.py:
+	Catched a possible exception
+	[e9bee64e1615]
+
+	* album/playlist.py:
+	Only create the _album playlist if it does not exist
+	[af2afb8b7220]
+
+	* album/albumlist.py, album/playlist.py:
+	Escape some text
+	[a6373069d80b]
+
+	* album/albumlist.py:
+	Combine Albums without a title
+	[aaf8f8564012]
+
+	* album/albumlist.py, album/playlist.py:
+	Made dynamic playlists work
+	[25e23f18c7e8]
+
+	* album/playlist.py:
+	Start the playback on activating a row in the playlist
+	[369a7626793f]
+
+	* album/albumlist.py, album/playlist.py:
+	Show correct status in the playlist
+	[0b81b6a332d2]
+
+	* album/playlist.py:
+	Made playlist entries activateable
+	[352d5ada2298]
+
+	* album/playlist.py:
+	Listen to various playlist events
+	[fea5e106ba19]
+
+	* album/playlist.py:
+	Listen to playlist_loaded events
+	[235ae580522d]
+
+	* album/playlist.py:
+	Remove status from other playlist entries when setting a new one
+	[311626d5152e]
+
+	* album/playlist.py:
+	Mark active playlist entry
+	[b08a8779616d]
+
+2008-02-18  Sebastian Sareyko  <public@nooms.de>
+
+	* album/playlist.py:
+	Whoops
+	[5532757a06e5]
+
+	* album/playlist.py:
+	Show the playlist entries
+	[bbcaa1af1c12]
+
+	* album/albumwindow.py, album/playlist.py:
+	Playlist widget added
+	[9cd9a2a172e8]
+
+	* album/albumlist.py:
+	Smaller icons please
+	[7d52ffc4ebc8]
+
+	* album/albumlist.py:
+	Privacy for the attributes!
+	[5f7a55c31836]
+
+	* album/album.py, album/albumlist.py:
+	Made sure covers find their row
+	[af40f18248d0]
+
+	* album.py, album/albumlist.py:
+	Playing around
+	[a66a62b82464]
+
+	* .hgignore, album.py, album/__init__.py, album/album.py,
+	album/albumlist.py, album/albumwindow.py, album/menu.py:
+	Initial commit
+	[bb774bd038da]
+
