@@ -62,7 +62,7 @@ class AlbumThing(object):
             from albumwindow import AlbumWindow
             from configuration import Configuration
 
-            gettext.install('albumthing')
+            gettext.install('albumthing', unicode=True)
 
             AlbumThing.__instance = AlbumThing.Singleton()
             AlbumThing.__instance.configuration = Configuration()

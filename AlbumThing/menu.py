@@ -15,7 +15,7 @@ class MenuBar:
         self.menu_items = (
             (_('/_File'), None, None, 0, '<Branch>'),
             (_('/_File/_Preferences'), None, self.preferences_resp, 0, None),
-            ('/_File/sep', None, None, 0, '<Separator>'),
+            (_('/_File/sep'), None, None, 0, '<Separator>'),
             (_('/_File/_Quit'), '<control>Q', self.quit_resp, 0, None),
             (_('/_Control'), None, None, 0, '<Branch>'),
             (_('/_Control/Select _Random Album'), '<control>M',

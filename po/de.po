@@ -6,17 +6,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-03-09 22:08+CET\n"
+"POT-Creation-Date: 2008-03-25 11:14+CET\n"
 "PO-Revision-Date: 2008-03-05 20:57+0100\n"
 "Last-Translator: Sebastian Sareyko <sebastian@sareyko.net>\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../AlbumThing/albumlist.py:215
+#: ../AlbumThing/albumlist.py:225
 msgid "Various Artists"
 msgstr "Verschiedene Kuenstler"
 
@@ -28,7 +28,7 @@ msgstr "Ein einfacher XMMS2-Client"
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: ../AlbumThing/controls.py:146
+#: ../AlbumThing/controls.py:149
 msgid ""
 "<b>No info found</b>\n"
 "I blame xmms2"
@@ -42,21 +42,33 @@ msgstr "/_Datei"
 msgid "/_File/_Preferences"
 msgstr "/_Datei/_Einstellungen"
 
+#: ../AlbumThing/menu.py:18
+msgid "/_File/sep"
+msgstr "/_Datei/sep"
+
 #: ../AlbumThing/menu.py:19
 msgid "/_File/_Quit"
 msgstr "/_Datei/_Beenden"
 
 #: ../AlbumThing/menu.py:20
+msgid "/_Control"
+msgstr "/_Steuerung"
+
+#: ../AlbumThing/menu.py:21
+msgid "/_Control/Select _Random Album"
+msgstr "/_Steuerung/_Zufälliges Album auswählen"
+
+#: ../AlbumThing/menu.py:23
 msgid "/_Help"
 msgstr "/_Hilfe"
 
-#: ../AlbumThing/menu.py:21
+#: ../AlbumThing/menu.py:24
 msgid "/_Help/_About"
-msgstr "/_Hilfe/_Ueber"
+msgstr "/_Hilfe/Ü_ber"
 
-#: ../AlbumThing/preferencesdialog.py:21
-msgid "Automatically start xmms2d"
-msgstr "xmms2d automatisch starten"
+#: ../AlbumThing/playlist.py:23
+msgid "Show active playlist"
+msgstr ""
 
 #: ../AlbumThing/preferencesdialog.py:27
 msgid "Show Cover Art in the album list"
@@ -69,3 +81,19 @@ msgstr "Zeige alternative Icons fuer Alben ohne CoverArt"
 #: ../AlbumThing/preferencesdialog.py:41
 msgid "Combine albums with various artists"
 msgstr "Alben mit mehreren Kuenstlern zusammenfassen"
+
+#: ../AlbumThing/preferencesdialog.py:46
+msgid "User Interface"
+msgstr "Aussehen"
+
+#: ../AlbumThing/preferencesdialog.py:51
+msgid "Automatically start xmms2d"
+msgstr "xmms2d automatisch starten"
+
+#: ../AlbumThing/preferencesdialog.py:57
+msgid "Play random album on stop"
+msgstr "Bei Stop zufälliges Album abspielen"
+
+#: ../AlbumThing/preferencesdialog.py:62
+msgid "Behaviour"
+msgstr "Verhalten"

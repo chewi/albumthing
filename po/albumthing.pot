@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-03-09 22:08+CET\n"
+"POT-Creation-Date: 2008-03-25 11:14+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 
 
-#: ../AlbumThing/albumlist.py:215
+#: ../AlbumThing/albumlist.py:225
 msgid "Various Artists"
 msgstr ""
 
@@ -27,7 +27,7 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-#: ../AlbumThing/controls.py:146
+#: ../AlbumThing/controls.py:149
 msgid ""
 "<b>No info found</b>\n"
 "I blame xmms2"
@@ -41,20 +41,32 @@ msgstr ""
 msgid "/_File/_Preferences"
 msgstr ""
 
+#: ../AlbumThing/menu.py:18
+msgid "/_File/sep"
+msgstr ""
+
 #: ../AlbumThing/menu.py:19
 msgid "/_File/_Quit"
 msgstr ""
 
 #: ../AlbumThing/menu.py:20
-msgid "/_Help"
+msgid "/_Control"
 msgstr ""
 
 #: ../AlbumThing/menu.py:21
+msgid "/_Control/Select _Random Album"
+msgstr ""
+
+#: ../AlbumThing/menu.py:23
+msgid "/_Help"
+msgstr ""
+
+#: ../AlbumThing/menu.py:24
 msgid "/_Help/_About"
 msgstr ""
 
-#: ../AlbumThing/preferencesdialog.py:21
-msgid "Automatically start xmms2d"
+#: ../AlbumThing/playlist.py:23
+msgid "Show active playlist"
 msgstr ""
 
 #: ../AlbumThing/preferencesdialog.py:27
@@ -67,5 +79,21 @@ msgstr ""
 
 #: ../AlbumThing/preferencesdialog.py:41
 msgid "Combine albums with various artists"
+msgstr ""
+
+#: ../AlbumThing/preferencesdialog.py:46
+msgid "User Interface"
+msgstr ""
+
+#: ../AlbumThing/preferencesdialog.py:51
+msgid "Automatically start xmms2d"
+msgstr ""
+
+#: ../AlbumThing/preferencesdialog.py:57
+msgid "Play random album on stop"
+msgstr ""
+
+#: ../AlbumThing/preferencesdialog.py:62
+msgid "Behaviour"
 msgstr ""
 
