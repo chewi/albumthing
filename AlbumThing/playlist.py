@@ -16,7 +16,7 @@ class PlayListThing(gtk.VBox):
     def __init__(self):
         super(PlayListThing, self).__init__(homogeneous=False, spacing=4)
 
-        self.__at = AlbumThing ()
+        self.__at = AlbumThing()
 
         self.__active = None
 
@@ -81,7 +81,7 @@ class PlayList(gtk.TreeView):
     def __init__(self):
         super(PlayList, self).__init__()
 
-        self.__at = AlbumThing ()
+        self.__at = AlbumThing()
         self.__status = gtk.STOCK_MEDIA_STOP
         self.__playlist_pos = 0
 

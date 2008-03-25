@@ -19,7 +19,7 @@ class AlbumListThing(gtk.VBox):
     def __init__(self):
         super(AlbumListThing, self).__init__(homogeneous=False, spacing=4)
 
-        self.__at = AlbumThing ()
+        self.__at = AlbumThing()
 
         self.filter_entry = gtk.Entry()
         self.pack_start(self.filter_entry, expand=False)
@@ -64,7 +64,7 @@ class AlbumList(gtk.TreeView):
         super(AlbumList, self).__init__()
 
         self.__ids = 0
-        self.__at = AlbumThing ()
+        self.__at = AlbumThing()
 
         self.num_albums = 0
 

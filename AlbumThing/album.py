@@ -13,7 +13,7 @@ from coverart import CoverArt
 class Album:
     def __init__(self, albumlist, name, artist, picture_front, size=0,
             duration=0):
-        self.__at = AlbumThing ()
+        self.__at = AlbumThing()
 
         self.__album_list = albumlist
 

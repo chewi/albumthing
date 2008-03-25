@@ -14,7 +14,7 @@ class PreferencesDialog(gtk.Dialog):
                 parent=parent, flags=gtk.DIALOG_DESTROY_WITH_PARENT,
                 buttons=(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE))
 
-        self.__at = AlbumThing ()
+        self.__at = AlbumThing()
         self.__parent = parent
 
         self.__start_xmms2d_check_button = gtk.CheckButton(

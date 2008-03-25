@@ -10,7 +10,7 @@ from albumthing import AlbumThing
 
 class Configuration:
     def __init__(self):
-        self.__at = AlbumThing ()
+        self.__at = AlbumThing()
 
         self.__cfg = ConfigParser.ConfigParser()
         self.__configuration_file = os.path.join(xmmsclient.userconfdir_get(),

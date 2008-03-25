@@ -10,7 +10,7 @@ from albumthing import AlbumThing
 
 class MenuBar:
     def __init__(self):
-        self.__at = AlbumThing ()
+        self.__at = AlbumThing()
 
         self.menu_items = (
             (_('/_File'), None, None, 0, '<Branch>'),

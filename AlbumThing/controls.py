@@ -18,7 +18,7 @@ class SeekBar(gtk.VBox):
     def __init__(self):
         super(SeekBar, self).__init__(homogeneous=False, spacing=4)
 
-        self.__at = AlbumThing ()
+        self.__at = AlbumThing()
         self.__duration = 0
 
         self.scale = gtk.HScale()
@@ -86,7 +86,7 @@ class AlbumControls(gtk.VBox):
     def __init__(self):
         super(AlbumControls, self).__init__(homogeneous=False, spacing=4)
 
-        self.__at = AlbumThing ()
+        self.__at = AlbumThing()
 
         self.button_box = gtk.HBox(homogeneous=False, spacing=4)
 

@@ -19,7 +19,7 @@ class AlbumWindow(gtk.Window):
     def __init__(self):
         super(AlbumWindow, self).__init__(gtk.WINDOW_TOPLEVEL)
 
-        self.__at = AlbumThing ()
+        self.__at = AlbumThing()
 
         self.__cb_foo = False
 
