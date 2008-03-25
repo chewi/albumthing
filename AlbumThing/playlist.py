@@ -85,6 +85,8 @@ class PlayList(gtk.TreeView):
         self.__status = gtk.STOCK_MEDIA_STOP
         self.__playlist_pos = 0
 
+        self.start_playback = False
+
         self.set_headers_visible(False)
 
         self.list_store = gtk.ListStore(gobject.TYPE_STRING,
@@ -120,6 +122,9 @@ class PlayList(gtk.TreeView):
         for id in result.value():
             self.__at.xmms.medialib_get_info(id, cb=self.__xmms_cb_id_info)
         self.__at.xmms.playback_status(cb=self.__xmms_cb_playback_status)
+        if self.start_playback:
+            self.start_playback = False
+            self.__at.xmms.playback_start()
 
 
     def __xmms_cb_current_pos(self, result):

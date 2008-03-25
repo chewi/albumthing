@@ -155,8 +155,8 @@ class AlbumList(gtk.TreeView):
     def __xmms_cb_playback_status(self, result):
         if result.value() == xmmsclient.PLAYBACK_STATUS_STOP and \
                 self.__at.configuration.get('behaviour', 'random_album'):
+            self.__at.win.playlist.playlist.start_playback = True
             self.random_album()
-            self.__at.xmms.playback_start()
 
 
     def __gtk_cb_selection_changed(self, selection, user_data):
