@@ -17,16 +17,16 @@ class PreferencesDialog(gtk.Dialog):
         self.__at = AlbumThing()
         self.__parent = parent
 
-        self.__start_xmms2d_check_button = gtk.CheckButton(
-                _('Automatically start xmms2d'))
-        self.__start_xmms2d_check_button.show()
-        self.vbox.pack_start(self.__start_xmms2d_check_button,
-                True, True, 0)
+        self.__notebook = gtk.Notebook()
+        self.__notebook.set_tab_pos(gtk.POS_TOP)
+        self.vbox.pack_start(self.__notebook, True, True, 0)
+
+        vbox = gtk.VBox()
 
         self.__cover_art_check_button = gtk.CheckButton(
                 _('Show Cover Art in the album list'))
         self.__cover_art_check_button.show()
-        self.vbox.pack_start(self.__cover_art_check_button,
+        vbox.pack_start(self.__cover_art_check_button,
                 True, True, 0)
 
         alignment = gtk.Alignment()
@@ -35,18 +35,42 @@ class PreferencesDialog(gtk.Dialog):
                 _('Show icons for albums without cover art'))
         alignment.add(self.__alternative_cover_art_check_button)
         alignment.show_all()
-        self.vbox.pack_start(alignment, True, True, 0)
+        vbox.pack_start(alignment, True, True, 0)
 
         self.__combine_va_check_button = gtk.CheckButton(
                 _('Combine albums with various artists'))
         self.__combine_va_check_button.show()
-        self.vbox.pack_start(self.__combine_va_check_button,
+        vbox.pack_start(self.__combine_va_check_button,
                 True, True, 0)
+
+        self.__notebook.append_page(vbox, gtk.Label(_('User Interface')))
+
+        vbox = gtk.VBox()
+
+        self.__start_xmms2d_check_button = gtk.CheckButton(
+                _('Automatically start xmms2d'))
+        self.__start_xmms2d_check_button.show()
+        vbox.pack_start(self.__start_xmms2d_check_button,
+                True, True, 0)
+
+        self.__random_album_check_button = gtk.CheckButton(
+                _('Play random album on stop'))
+        self.__random_album_check_button.show()
+        vbox.pack_start(self.__random_album_check_button,
+                True, True, 0)
+
+        self.__notebook.append_page(vbox, gtk.Label(_('Behaviour')))
+        self.__notebook.show_all()
 
         if self.__at.configuration.get('common', 'start_xmms2d'):
             self.__start_xmms2d_check_button.set_active(True)
         else:
             self.__start_xmms2d_check_button.set_active(False)
+
+        if self.__at.configuration.get('behaviour', 'random_album'):
+            self.__random_album_check_button.set_active(True)
+        else:
+            self.__random_album_check_button.set_active(False)
 
         if self.__at.configuration.get('ui', 'show_cover_art'):
             self.__cover_art_check_button.set_active(True)
@@ -66,6 +90,8 @@ class PreferencesDialog(gtk.Dialog):
         self.connect('response', self.__gtk_cb_response)
         self.__start_xmms2d_check_button.connect('toggled',
                 self.__gtk_cb_start_xmms2d_toggled)
+        self.__random_album_check_button.connect('toggled',
+                self.__gtk_cb_random_album_toggled)
         self.__cover_art_check_button.connect('toggled',
                 self.__gtk_cb_cover_art_toggled)
         self.__alternative_cover_art_check_button.connect('toggled',
@@ -84,6 +110,13 @@ class PreferencesDialog(gtk.Dialog):
             self.__at.configuration.set('common', 'start_xmms2d', '1')
         else:
             self.__at.configuration.set('common', 'start_xmms2d', '0')
+
+
+    def __gtk_cb_random_album_toggled(self, togglebutton):
+        if self.__random_album_check_button.get_active():
+            self.__at.configuration.set('behaviour', 'random_album', '1')
+        else:
+            self.__at.configuration.set('behaviour', 'random_album', '0')
 
 
     def __gtk_cb_cover_art_toggled(self, togglebutton):
