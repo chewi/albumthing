@@ -1,0 +1,9 @@
+AlbumThing is a simple client for the XMMS2 music player. It features a very
+simple user interface consisting of a list containing all available albums and
+a playlist. Clicking an album automatically fills the playlist with its
+contents. AlbumThing was inspired by Muine <http://muine-player.org/wiki/Main_Page>.
+
+For a list of required software and installation instructions see the
+INSTALL file.
+
+New releases and more information can be found at <http://nooms.de/projects/albumthing/>

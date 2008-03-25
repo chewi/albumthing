@@ -1,0 +1,18 @@
+To install and run AlbumThing you'll need the following software packages:
+
+ o Python <http://python.org/>
+ o XMMS2 <http://xmms2.xmms.se/>
+ o GTK+ <http://www.gtk.org/>
+ o PyGTK <http://www.pygtk.org/>
+
+
+To install AlbumThing all you need to do is issuing the following command:
+
+ python ./setup.py install
+
+
+There's, however, no need to do a full installation if you just want to give
+AlbumThing a try. Run the following command to start it from within this
+directory:
+
+ python ./albumthing.py
