@@ -10,7 +10,7 @@ except:
 
 
 NAME = 'AlbumThing'
-VERSION = '0.1'
+VERSION = '0.2'
 URL = 'http://nooms.de/projects/albumthing/'
 DESC = _('A simple XMMS2 client')
 
