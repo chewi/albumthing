@@ -232,6 +232,10 @@ class PlayList(gtk.TreeView):
 
 
     def set_active(self, pos):
+        try:
+            pos = pos['position']
+        except Exception:
+            pass
         i = 0
         iter = self.list_store.get_iter_first()
         while iter:
