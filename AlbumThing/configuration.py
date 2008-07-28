@@ -15,24 +15,27 @@ class Configuration:
         self.__cfg = ConfigParser.ConfigParser()
         self.__configuration_file = os.path.join(xmmsclient.userconfdir_get(),
                 'clients', 'AlbumThing.ini')
+
+        # defaults
+        self.__cfg.add_section('common')
+        self.__cfg.set('common', 'start_xmms2d', '0')
+        self.__cfg.add_section('ui')
+        self.__cfg.set('ui', 'show_cover_art', '1')
+        self.__cfg.set('ui', 'show_alternative_cover_art', '0')
+        self.__cfg.set('ui', 'combine_va_albums', '1')
+        self.__cfg.add_section('win')
+        self.__cfg.set('win', 'width', '500')
+        self.__cfg.set('win', 'height', '600')
+        self.__cfg.set('win', 'pos_x', '0')
+        self.__cfg.set('win', 'pos_y', '0')
+        self.__cfg.set('win', 'pos_hpaned', '160')
+        self.__cfg.add_section('behaviour')
+        self.__cfg.set('behaviour', 'random_album', '0')
         try:
             fd = open (self.__configuration_file, 'r')
             self.__cfg.readfp(fd)
         except IOError:
-            self.__cfg.add_section('common')
-            self.__cfg.set('common', 'start_xmms2d', '0')
-            self.__cfg.add_section('ui')
-            self.__cfg.set('ui', 'show_cover_art', '1')
-            self.__cfg.set('ui', 'show_alternative_cover_art', '0')
-            self.__cfg.set('ui', 'combine_va_albums', '1')
-            self.__cfg.add_section('win')
-            self.__cfg.set('win', 'width', '500')
-            self.__cfg.set('win', 'height', '600')
-            self.__cfg.set('win', 'pos_x', '0')
-            self.__cfg.set('win', 'pos_y', '0')
-            self.__cfg.set('win', 'pos_hpaned', '160')
-            self.__cfg.add_section('behaviour')
-            self.__cfg.set('behaviour', 'random_album', '0')
+            pass
 
 
     def get(self, section, var):
