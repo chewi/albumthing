@@ -90,7 +90,7 @@ class AlbumControls(gtk.VBox):
 
         self.button_box = gtk.HBox(homogeneous=False, spacing=4)
 
-        self.play_pause_button = gtk.ToggleButton(use_underline=False)
+        self.play_pause_button = gtk.ToggleButton()
         self.play_pause_button.set_mode(False)
         self.play_pause_button.set_use_stock(True)
         self.play_pause_button.set_label(gtk.STOCK_MEDIA_PLAY)
