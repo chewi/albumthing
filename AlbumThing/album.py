@@ -50,7 +50,8 @@ class Album:
 
 
     def add_duration(self, duration):
-        self.duration = self.duration + duration
+        if duration:
+            self.duration = self.duration + duration
 
 
     def get_cover_image(self):

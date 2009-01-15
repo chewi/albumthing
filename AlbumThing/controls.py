@@ -40,7 +40,11 @@ class SeekBar(gtk.VBox):
     def __xmms_cb_id_info(self, result):
         if not result.value():
             return
-        self.__duration = result.value()['duration']
+        try:
+            self.__duration = result.value()['duration']
+        except KeyError:
+            # FIXME: Non-seekable stream?
+            pass
 
 
     def __xmms_cb_current_id(self, result):
