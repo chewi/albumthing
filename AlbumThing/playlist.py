@@ -57,7 +57,7 @@ class PlayListThing(gtk.VBox):
         else:
             pls = const.PLAYLIST_NAME1
         self.__at.xmms.playlist_clear(pls)
-        self.__at.xmms.playlist_add_collection(coll, order=['album', 'tracknr'],
+        self.__at.xmms.playlist_add_collection(coll, order=['album', 'partofset', 'tracknr'],
                 playlist=pls)
         self.__at.xmms.playlist_load(pls)
 
