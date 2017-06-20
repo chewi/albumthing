@@ -50,16 +50,18 @@ class PlayListThing(Gtk.VBox):
         self.recover_active()
 
 
-    def load_coll(self, coll):
+    def load_tracks(self, tracks):
         if self.__active == const.PLAYLIST_NAME1:
             pls = const.PLAYLIST_NAME2
         else:
             pls = const.PLAYLIST_NAME1
-        self.__at.xmms.playlist_clear(pls)
-        self.__at.xmms.playlist_add_collection(coll, order=['album', 'partofset', 'tracknr'],
-                playlist=pls)
-        self.__at.xmms.playlist_load(pls)
 
+        self.__at.xmms.playlist_clear(pls)
+
+        for id in tracks:
+            self.__at.xmms.playlist_add_id(id, pls)
+
+        self.__at.xmms.playlist_load(pls)
         self.active_playlist_button.show()
 
 

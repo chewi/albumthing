@@ -7,14 +7,12 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GdkPixbuf, GLib
 
 
-CDROM = Gtk.Image().render_icon(Gtk.STOCK_CDROM, Gtk.IconSize.DND)
-
-
 class CoverArt:
+    fallback = Gtk.Image().render_icon(Gtk.STOCK_CDROM, Gtk.IconSize.DND)
+
     def __init__(self, data, size):
         pixbuf_loader = GdkPixbuf.PixbufLoader()
         self.pixbuf = None
-        global foo
 
         try:
             pixbuf_loader.write(data)
@@ -23,7 +21,7 @@ class CoverArt:
             self.pixbuf = self.pixbuf.scale_simple(size, size,
                     GdkPixbuf.InterpType.BILINEAR)
         except Exception as detail:
-            self.pixbuf = CDROM
+            self.pixbuf = self.fallback
 
         try:
             pixbuf_loader.close()

@@ -10,9 +10,10 @@ from gi.repository import GLib, GdkPixbuf
 from xmmsclient import collections as xc
 import xmmsclient
 import operator
-from .album import Album
 from .albumthing import AlbumThing
+from .coverart import CoverArt
 from . import const
+from functools import partial
 
 
 class AlbumListThing(Gtk.VBox):
@@ -63,18 +64,14 @@ class AlbumList(Gtk.TreeView):
     def __init__(self):
         super(AlbumList, self).__init__()
 
-        self.__ids = 0
         self.__at = AlbumThing()
-
-        self.num_albums = 0
 
         self.set_headers_visible(False)
         self.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
 
         self.list_store = Gtk.ListStore(GdkPixbuf.Pixbuf,
-                GObject.TYPE_STRING, GObject.TYPE_INT,
-                GObject.TYPE_STRING, GObject.TYPE_STRING,
-                GObject.TYPE_BOOLEAN)
+                                        GObject.TYPE_STRING,
+                                        GObject.TYPE_PYOBJECT)
 
         self.pixbuf_renderer = Gtk.CellRendererPixbuf()
         self.pixbuf_renderer.set_fixed_size(-1, const.COVER_SIZE + 4)
@@ -93,57 +90,46 @@ class AlbumList(Gtk.TreeView):
         self.append_column(self.name_column)
 
         self.set_model(self.list_store)
-        self.set_search_column(4)
 
         self.get_selection().connect('changed',
                 self.__gtk_cb_selection_changed, None)
 
 
-    def __xmms_cb_song_list(self, result):
-        def eq(str1, str2):
-            ret = False
-            try:
-                if str1.lower() == str2.lower():
-                    ret = True
-            except AttributeError:
-                if not str1 and not str2:
-                    ret = True
-            return ret
-
-        def compare(a):
-            return a['album'].lower() if a['album'] else ''
-
+    def __xmms_cb_song_list(self, sresult, aresults):
         self.list_store.clear()
-        self.num_albums = 0
-        combine = self.__at.configuration.get('ui', 'combine_va_albums')
-        duration = 0
-        last_album = None
-        last_artist = None
-        album = None
-        songs = result.value()
-        songs.sort(key=compare)
-        for song in songs:
-            if album and eq(last_album, song['album']) and \
-                    last_artist == song['artist']:
-                album.increase_size()
-                album.add_duration(song['duration'])
-            elif album and eq(last_album, song['album']) and combine:
-                album.increase_size()
-                album.add_duration(song['duration'])
-                album.various_artists = True
-            else:
-                if album:
-                    self.add_album(album)
-                    self.num_albums = self.num_albums + 1
-                album = Album(self, song['album'],
-                        song['artist'], song['picture_front'], 1,
-                        song['duration'])
 
-            last_album = song['album']
-            last_artist = song['artist']
+        tracks = sresult['tracks']
 
-        self.add_album(album)
-        self.num_albums = self.num_albums + 1
+        if tracks:
+            secs = sresult['duration'] / 1000
+            mins, secs = divmod(secs, 60)
+
+            iter = self.list_store.append(
+                [None, '<b>%s</b>\nVarious Artists <small>- %d Tracks/%d:%02d Minutes</small>' %
+                 (const.UNKNOWN, len(tracks), mins, secs), tracks]
+            )
+
+            if self.__at.configuration.get('ui', 'show_cover_art'):
+                self.list_store.set_value(iter, 0, CoverArt.fallback)
+
+        for r in sorted(aresults, key=lambda r: r['album'].lower()):
+            secs = r['duration'] / 1000
+            mins, secs = divmod(secs, 60)
+
+            album = GLib.markup_escape_text(r['album'] or const.UNKNOWN)
+            artist = GLib.markup_escape_text(r['artist'] or const.UNKNOWN)
+            tracks = r['tracks']
+
+            iter = self.list_store.append(
+                [None, '<b>%s</b>\n%s <small>- %d Tracks/%d:%02d Minutes</small>' %
+                 (album, artist, len(tracks), mins, secs), tracks]
+            )
+
+            if self.__at.configuration.get('ui', 'show_cover_art'):
+                if r['cover_art']:
+                    self.__at.xmms.bindata_retrieve(r['cover_art'], cb=partial(self.set_cover, iter))
+                else:
+                    self.list_store.set_value(iter, 0, CoverArt.fallback)
 
 
     def __xmms_cb_playback_status(self, result):
@@ -160,84 +146,18 @@ class AlbumList(Gtk.TreeView):
            # FIXME: What should we do?
            return
 
-       colls = []
+       tracks = []
+
        for path in rows:
            iter = self.list_store.get_iter(path)
-           artist = self.list_store.get_value(iter, 3)
-           album = self.list_store.get_value(iter, 4)
-           va = self.list_store.get_value(iter, 5)
-           if not va:
-               if not artist and not album:
-                   colls.append(xc.Intersection(
-                       xc.Complement(xc.Has(xc.Universe(), 'artist')),
-                       xc.Complement(xc.Has(xc.Universe(), 'album'))))
-               elif not artist:
-                   colls.append(xc.Intersection(
-                       xc.Complement(xc.Has(xc.Universe(), 'artist')),
-                       xc.Equals(field='album', value=album)))
-               elif not album:
-                   colls.append(xc.Intersection(
-                       xc.Complement(xc.Has(xc.Universe(), 'album')),
-                       xc.Equals(field='artist', value=artist)))
-               else:
-                   colls.append(xc.Intersection(
-                       xc.Equals(field='artist', value=artist),
-                       xc.Equals(field='album', value=album)))
-           else:
-               if not album:
-                   colls.append(xc.Complement(xc.Has(xc.Universe(), 'album')))
-               else:
-                   colls.append(xc.Equals(field='album', value=album))
+           tracks.extend(self.list_store.get_value(iter, 2))
 
-       coll = xc.Union(*colls)
-       self.__at.win.playlist.load_coll(coll)
+       self.__at.win.playlist.load_tracks(tracks)
 
 
-    def __increase_ids(self):
-        self.__ids = self.__ids + 1
-
-
-    def add_album(self, album):
-        """
-        Adds an Album to the list
-        """
-
-        if not album:
-            return
-
-        if not album.name:
-            name = const.UNKNOWN
-        else:
-            name = album.name
-
-        if not album.artist:
-            artist = const.UNKNOWN
-        else:
-            artist = album.artist
-
-        if album.various_artists:
-            artist = _('Various Artists')
-
-        self.list_store.append([None,
-            '<b>%s</b>\n%s <small>- %d Tracks/%d:%02d Minutes</small>' %
-            (GLib.markup_escape_text(name), GLib.markup_escape_text(artist),
-                album.size, album.get_duration_min(), album.get_duration_sec()),
-            self.__ids, album.artist, album.name, album.various_artists])
-
-        album.set_id(self.__ids)
-        self.__increase_ids()
-
-
-    def set_cover(self, id, pixbuf):
-        if not pixbuf:
-            return
-
-        iter = self.list_store.get_iter_first()
-        while iter:
-            if id == self.list_store.get_value(iter, 2):
-                self.list_store.set_value(iter, 0, pixbuf)
-                break
-            iter = self.list_store.iter_next(iter)
+    def set_cover(self, iter, result):
+        cover_art = CoverArt(result.value(), 40)
+        self.list_store.set_value(iter, 0, cover_art.pixbuf)
 
 
     def filter(self, string):
@@ -248,15 +168,91 @@ class AlbumList(Gtk.TreeView):
             coll_album = xc.Match(field='album', value=string)
             coll_title = xc.Match(field='title', value=string)
             coll = xc.Union(coll_artist, coll_album, coll_title)
-        self.__at.xmms.coll_query_infos(coll,
-                ['id', 'album', 'artist', 'duration', 'picture_front'],
-                cb=self.__xmms_cb_song_list)
+
+        scoll = xc.Order(xc.Order(coll, 'title'), 'artist')
+        acoll = xc.Order(xc.Order(xc.Order(coll, 'tracknr'), 'partofset'), 'album_artist_sort')
+
+        sresult = self.__at.xmms.coll_query(
+            xc.Intersection(scoll, xc.Complement(xc.Has(field='album'))),
+            {
+                'type': 'organize',
+                'data': {
+                    'duration': {
+                        'type': 'metadata',
+                        'get': ['value'],
+                        'fields': ['duration'],
+                        'aggregate': 'sum'
+                    },
+                    'tracks': {
+                        'type': 'metadata',
+                        'get': ['id'],
+                        'aggregate': 'set'
+                    }
+                }
+            }
+        )
+
+        cluster_data = {
+            'type': 'organize',
+            'data': {
+                'artist': {
+                    'type': 'metadata',
+                    'get': ['value'],
+                    'fields': ['album_artist', 'artist']
+                },
+                'album': {
+                    'type': 'metadata',
+                    'get': ['value'],
+                    'fields': ['album']
+                },
+                'cover_art': {
+                    'type': 'metadata',
+                    'get': ['value'],
+                    'fields': ['picture_front']
+                },
+                'duration': {
+                    'type': 'metadata',
+                    'get': ['value'],
+                    'fields': ['duration'],
+                    'aggregate': 'sum'
+                },
+                'tracks': {
+                    'type': 'metadata',
+                    'get': ['id'],
+                    'aggregate': 'set'
+                }
+            }
+        }
+            
+        aresult = self.__at.xmms.coll_query(
+            xc.Intersection(acoll, xc.Complement(xc.Has(field='album_id'))),
+            {
+                'type': 'cluster-list',
+                'cluster-field': 'album',
+                'data': cluster_data
+            }
+        )
+
+        aidresult = self.__at.xmms.coll_query(
+            xc.Intersection(acoll, xc.Has(field='album')),
+            {
+                'type': 'cluster-list',
+                'cluster-field': 'album_id',
+                'data': cluster_data
+            }
+        )
+
+        sresult.wait()
+        aresult.wait()
+        aidresult.wait()
+
+        self.__xmms_cb_song_list(sresult.value(), aresult.value() + aidresult.value())
 
 
     def random_album(self):
         import random
 
-        r = random.randint(0, self.num_albums)
+        r = random.randint(0, self.list_store.iter_n_children(None))
         self.get_selection().unselect_all()
         self.get_selection().select_iter(
                 self.list_store.get_iter_from_string('%d:' % r))
@@ -264,8 +260,6 @@ class AlbumList(Gtk.TreeView):
 
 
     def setup_callbacks(self):
-        self.__at.xmms.coll_query_infos(xc.Universe(),
-                ['id', 'album', 'artist', 'duration', 'picture_front'],
-                cb=self.__xmms_cb_song_list)
+        self.filter(None)
         self.__at.xmms.broadcast_playback_status(
                 cb=self.__xmms_cb_playback_status)
