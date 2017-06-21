@@ -2,10 +2,10 @@
 # See COPYING file for details.
 
 
-import pygtk
-pygtk.require('2.0')
-import gtk
-import gobject
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+from gi.repository import GObject
 from albumthing import AlbumThing
 from coverart import CoverArt
 

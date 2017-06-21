@@ -2,11 +2,11 @@
 # See COPYING file for details.
 
 
-import pygtk
-pygtk.require('2.0')
-import gtk
-import gobject
-from gobject import markup_escape_text
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+from gi.repository import GObject
+from gi.repository import GLib, GdkPixbuf
 from xmmsclient import collections as xc
 import xmmsclient
 import operator
@@ -15,22 +15,22 @@ from albumthing import AlbumThing
 import const
 
 
-class AlbumListThing(gtk.VBox):
+class AlbumListThing(Gtk.VBox):
     def __init__(self):
         super(AlbumListThing, self).__init__(homogeneous=False, spacing=4)
 
         self.__at = AlbumThing()
 
-        self.filter_entry = gtk.Entry()
-        self.pack_start(self.filter_entry, expand=False)
+        self.filter_entry = Gtk.Entry()
+        self.pack_start(self.filter_entry, False, True, 0)
 
         self.album_list = AlbumList()
 
-        scrolled_album = gtk.ScrolledWindow()
-        scrolled_album.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        scrolled_album.set_shadow_type(gtk.SHADOW_IN)
+        scrolled_album = Gtk.ScrolledWindow()
+        scrolled_album.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        scrolled_album.set_shadow_type(Gtk.ShadowType.IN)
         scrolled_album.add(self.album_list)
-        self.pack_start(scrolled_album)
+        self.pack_start(scrolled_album, True, True, 0)
 
         self.filter_entry.connect('changed', self.__gtk_cb_changed, None)
 
@@ -59,7 +59,7 @@ class AlbumListThing(gtk.VBox):
         self.album_list.filter(self.filter_entry.get_text())
 
 
-class AlbumList(gtk.TreeView):
+class AlbumList(Gtk.TreeView):
     def __init__(self):
         super(AlbumList, self).__init__()
 
@@ -69,26 +69,26 @@ class AlbumList(gtk.TreeView):
         self.num_albums = 0
 
         self.set_headers_visible(False)
-        self.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
+        self.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
 
-        self.list_store = gtk.ListStore(gtk.gdk.Pixbuf,
-                gobject.TYPE_STRING, gobject.TYPE_INT,
-                gobject.TYPE_STRING, gobject.TYPE_STRING,
-                gobject.TYPE_BOOLEAN)
+        self.list_store = Gtk.ListStore(GdkPixbuf.Pixbuf,
+                GObject.TYPE_STRING, GObject.TYPE_INT,
+                GObject.TYPE_STRING, GObject.TYPE_STRING,
+                GObject.TYPE_BOOLEAN)
 
-        self.pixbuf_renderer = gtk.CellRendererPixbuf()
+        self.pixbuf_renderer = Gtk.CellRendererPixbuf()
         self.pixbuf_renderer.set_fixed_size(-1, const.COVER_SIZE + 4)
-        self.text_renderer = gtk.CellRendererText()
+        self.text_renderer = Gtk.CellRendererText()
 
-        self.cover_column = gtk.TreeViewColumn('cover')
-        self.cover_column.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
+        self.cover_column = Gtk.TreeViewColumn('cover')
+        self.cover_column.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)
         self.cover_column.pack_start(self.pixbuf_renderer, True)
         self.cover_column.add_attribute(self.pixbuf_renderer, 'pixbuf', 0)
         self.append_column(self.cover_column)
 
-        self.name_column = gtk.TreeViewColumn('name')
-        self.name_column.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
-        self.name_column.pack_start(self.text_renderer)
+        self.name_column = Gtk.TreeViewColumn('name')
+        self.name_column.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)
+        self.name_column.pack_start(self.text_renderer, True)
         self.name_column.add_attribute(self.text_renderer, 'markup', 1)
         self.append_column(self.name_column)
 
@@ -226,7 +226,7 @@ class AlbumList(gtk.TreeView):
 
         self.list_store.append([None,
             '<b>%s</b>\n%s <small>- %d Tracks/%d:%02d Minutes</small>' %
-            (markup_escape_text(name), markup_escape_text(artist),
+            (GLib.markup_escape_text(name), GLib.markup_escape_text(artist),
                 album.size, album.get_duration_min(), album.get_duration_sec()),
             self.__ids, album.artist, album.name, album.various_artists])
 

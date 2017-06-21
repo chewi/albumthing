@@ -3,38 +3,38 @@
 
 
 from __future__ import division
-import pygtk
-pygtk.require('2.0')
-import gtk
-import gobject
-from gobject import markup_escape_text
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+from gi.repository import GLib
+from gi.repository import GObject
 import xmmsclient
 from albumthing import AlbumThing
 from coverart import CoverArt
 import const
 
 
-class SeekBar(gtk.VBox):
+class SeekBar(Gtk.VBox):
     def __init__(self):
         super(SeekBar, self).__init__(homogeneous=False, spacing=4)
 
         self.__at = AlbumThing()
         self.__duration = 0
 
-        self.scale = gtk.HScale()
+        self.scale = Gtk.HScale()
         self.scale.set_draw_value(False)
         self.scale.set_range(0, 1)
-        self.pack_start(self.scale)
+        self.pack_start(self.scale, True, True, 0)
 
-        self.time = gtk.Label('-')
-        self.pack_start(self.time)
+        self.time = Gtk.Label(label='-')
+        self.pack_start(self.time, True, True, 0)
 
         self.scale.connect('change-value', self.__gtk_cb_change_value, None)
 
         try:
-            gobject.timeout_add_seconds(1, self.__poll_playtime)
+            GObject.timeout_add_seconds(1, self.__poll_playtime)
         except AttributeError:
-            gobject.timeout_add(1000, self.__poll_playtime)
+            GObject.timeout_add(1000, self.__poll_playtime)
 
 
     def __xmms_cb_id_info(self, result):
@@ -86,48 +86,48 @@ class SeekBar(gtk.VBox):
                 cb=self.__xmms_cb_current_id)
 
 
-class AlbumControls(gtk.VBox):
+class AlbumControls(Gtk.VBox):
     def __init__(self):
         super(AlbumControls, self).__init__(homogeneous=False, spacing=4)
 
         self.__at = AlbumThing()
 
-        self.button_box = gtk.HBox(homogeneous=False, spacing=4)
+        self.button_box = Gtk.HBox(homogeneous=False, spacing=4)
 
-        self.play_pause_button = gtk.ToggleButton()
+        self.play_pause_button = Gtk.ToggleButton()
         self.play_pause_button.set_mode(False)
         self.play_pause_button.set_use_stock(True)
-        self.play_pause_button.set_label(gtk.STOCK_MEDIA_PLAY)
+        self.play_pause_button.set_label(Gtk.STOCK_MEDIA_PLAY)
         self.button_box.pack_start (self.play_pause_button, False, False, 4)
 
-        self.prev_button = gtk.Button(stock=gtk.STOCK_MEDIA_PREVIOUS)
+        self.prev_button = Gtk.Button(stock=Gtk.STOCK_MEDIA_PREVIOUS)
         label = self.prev_button.get_children()[0]
         label = label.get_children()[0].get_children()[1]
         label.set_text('')
-        self.button_box.pack_start (self.prev_button, False, False)
+        self.button_box.pack_start (self.prev_button, False, False, 0)
 
-        self.next_button = gtk.Button(stock=gtk.STOCK_MEDIA_NEXT)
+        self.next_button = Gtk.Button(stock=Gtk.STOCK_MEDIA_NEXT)
         label = self.next_button.get_children()[0]
         label = label.get_children()[0].get_children()[1]
         label.set_text('')
-        self.button_box.pack_start (self.next_button, False, False)
+        self.button_box.pack_start (self.next_button, False, False, 0)
 
         self.seek_bar = SeekBar()
-        self.button_box.pack_start(self.seek_bar, padding=4)
+        self.button_box.pack_start(self.seek_bar, True, True, 4)
 
-        self.pack_start(self.button_box, expand=False)
+        self.pack_start(self.button_box, False, True, 0)
 
-        self.cover_art = gtk.Image()
+        self.cover_art = Gtk.Image()
 
-        self.info_label = gtk.Label('<b>Not Connected</b>')
+        self.info_label = Gtk.Label(label='<b>Not Connected</b>')
         self.info_label.set_use_markup(True)
         self.info_label.set_selectable(True)
 
-        label_holder = gtk.HBox(homogeneous=False)
+        label_holder = Gtk.HBox(homogeneous=False)
         label_holder.pack_start(self.cover_art, False, False, 4)
         label_holder.pack_start(self.info_label, False, False, 4)
 
-        self.pack_start(label_holder)
+        self.pack_start(label_holder, True, True, 0)
 
         self.play_pause_button.connect('toggled',
                 self.__gtk_cb_play_pause_toggled, None)
@@ -176,8 +176,8 @@ class AlbumControls(gtk.VBox):
 
         self.info_label.set_markup(
                 '<b>%s</b>\n<small>by</small> %s <small>from</small> %s' %
-                (markup_escape_text(title), markup_escape_text(artist),
-                    markup_escape_text(album)))
+                (GLib.markup_escape_text(title), GLib.markup_escape_text(artist),
+                    GLib.markup_escape_text(album)))
 
 
     def __xmms_cb_bindata_retrieve(self, result):

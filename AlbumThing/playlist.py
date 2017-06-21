@@ -2,17 +2,16 @@
 # See COPYING file for details.
 
 
-import pygtk
-pygtk.require('2.0')
-import gtk
-import gobject
-from gobject import markup_escape_text
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+from gi.repository import GObject, GLib
 import xmmsclient
 from albumthing import AlbumThing
 import const
 
 
-class PlayListThing(gtk.VBox):
+class PlayListThing(Gtk.VBox):
     def __init__(self):
         super(PlayListThing, self).__init__(homogeneous=False, spacing=4)
 
@@ -20,18 +19,18 @@ class PlayListThing(gtk.VBox):
 
         self.__active = None
 
-        self.active_playlist_button = gtk.Button(_('Show active playlist'),
-                gtk.STOCK_GO_BACK)
-        self.active_playlist_button.set_relief(gtk.RELIEF_NONE)
-        self.pack_start(self.active_playlist_button, expand=False)
+        self.active_playlist_button = Gtk.Button(_('Show active playlist'),
+                Gtk.STOCK_GO_BACK)
+        self.active_playlist_button.set_relief(Gtk.ReliefStyle.NONE)
+        self.pack_start(self.active_playlist_button, False, True, 0)
 
         self.playlist = PlayList()
 
-        scrolled_playlist = gtk.ScrolledWindow()
-        scrolled_playlist.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        scrolled_playlist.set_shadow_type(gtk.SHADOW_IN)
+        scrolled_playlist = Gtk.ScrolledWindow()
+        scrolled_playlist.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        scrolled_playlist.set_shadow_type(Gtk.ShadowType.IN)
         scrolled_playlist.add(self.playlist)
-        self.pack_start(scrolled_playlist)
+        self.pack_start(scrolled_playlist, True, True, 0)
 
         self.active_playlist_button.connect('clicked',
                 self.__gtk_cb_button_clicked, None)
@@ -77,34 +76,34 @@ class PlayListThing(gtk.VBox):
                 cb=self.__xmms_cb_current_pos)
 
 
-class PlayList(gtk.TreeView):
+class PlayList(Gtk.TreeView):
     def __init__(self):
         super(PlayList, self).__init__()
 
         self.__at = AlbumThing()
-        self.__status = gtk.STOCK_MEDIA_STOP
+        self.__status = Gtk.STOCK_MEDIA_STOP
         self.__playlist_pos = 0
 
         self.start_playback = False
 
         self.set_headers_visible(False)
 
-        self.list_store = gtk.ListStore(gobject.TYPE_STRING,
-                gobject.TYPE_STRING, gobject.TYPE_INT, gobject.TYPE_STRING)
+        self.list_store = Gtk.ListStore(GObject.TYPE_STRING,
+                GObject.TYPE_STRING, GObject.TYPE_INT, GObject.TYPE_STRING)
 
-        self.pixbuf_renderer = gtk.CellRendererPixbuf()
+        self.pixbuf_renderer = Gtk.CellRendererPixbuf()
         self.pixbuf_renderer.set_fixed_size(-1, 32)
-        self.text_renderer = gtk.CellRendererText()
+        self.text_renderer = Gtk.CellRendererText()
 
-        self.status_column = gtk.TreeViewColumn('status')
-        self.status_column.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
+        self.status_column = Gtk.TreeViewColumn('status')
+        self.status_column.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)
         self.status_column.pack_start(self.pixbuf_renderer, True)
         self.status_column.add_attribute(self.pixbuf_renderer, 'stock-id', 0)
         self.append_column(self.status_column)
 
-        self.name_column = gtk.TreeViewColumn('name')
-        self.name_column.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
-        self.name_column.pack_start(self.text_renderer)
+        self.name_column = Gtk.TreeViewColumn('name')
+        self.name_column.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)
+        self.name_column.pack_start(self.text_renderer, True)
         self.name_column.add_attribute(self.text_renderer, 'markup', 1)
         self.append_column(self.name_column)
 
@@ -158,11 +157,11 @@ class PlayList(gtk.TreeView):
     def __xmms_cb_playback_status(self, result):
         status = result.value()
         if status == xmmsclient.PLAYBACK_STATUS_PAUSE:
-            self.__status = gtk.STOCK_MEDIA_PAUSE
+            self.__status = Gtk.STOCK_MEDIA_PAUSE
         elif status == xmmsclient.PLAYBACK_STATUS_PLAY:
-            self.__status = gtk.STOCK_MEDIA_PLAY
+            self.__status = Gtk.STOCK_MEDIA_PLAY
         elif status == xmmsclient.PLAYBACK_STATUS_STOP:
-            self.__status = gtk.STOCK_MEDIA_STOP
+            self.__status = Gtk.STOCK_MEDIA_STOP
         self.set_active(self.__playlist_pos)
         self.__at.xmms.playlist_current_pos(cb=self.__xmms_cb_current_pos)
 
@@ -210,8 +209,8 @@ class PlayList(gtk.TreeView):
     def insert_entry(self, pos, id, artist, title, album):
         self.list_store.insert(pos, [None,
             '<b>%s</b>\n<small>by</small> %s <small>from</small> %s' %
-            (markup_escape_text(title), markup_escape_text(artist),
-                markup_escape_text(album)), id, title])
+            (GLib.markup_escape_text(title), GLib.markup_escape_text(artist),
+                GLib.markup_escape_text(album)), id, title])
 
 
     def remove_entry(self, pos):

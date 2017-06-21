@@ -2,22 +2,22 @@
 # See COPYING file for details.
 
 
-import pygtk
-pygtk.require('2.0')
-import gtk
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk, Gdk
 import menu, albumlist, playlist, controls, aboutdialog, preferencesdialog
-import gobject
+from gi.repository import GObject
 from albumthing import AlbumThing
 import const
 
 
-class AlbumWindow(gtk.Window):
+class AlbumWindow(Gtk.Window):
     """
     The main window
     """
 
     def __init__(self):
-        super(AlbumWindow, self).__init__(gtk.WINDOW_TOPLEVEL)
+        super(AlbumWindow, self).__init__(Gtk.WindowType.TOPLEVEL)
 
         self.__at = AlbumThing()
 
@@ -28,28 +28,27 @@ class AlbumWindow(gtk.Window):
         self.album_list = albumlist.AlbumListThing()
         self.playlist = playlist.PlayListThing()
         self.controls = controls.AlbumControls()
-        self.vbox = gtk.VBox(homogeneous=False, spacing=8)
+        self.vbox = Gtk.VBox(homogeneous=False, spacing=8)
         self.about_dialog = aboutdialog.AboutDialog()
         self.preferences_dialog = preferencesdialog.PreferencesDialog(self)
 
-        self.hpaned = gtk.HPaned()
+        self.hpaned = Gtk.HPaned()
         self.hpaned.set_position(
                 int(self.__at.configuration.get('win', 'pos_hpaned')))
 
         self.hpaned.add1(self.album_list)
         self.hpaned.add2(self.playlist)
 
-        self.menu_bar = menu.MenuBar()
+        self.menu_bar = menu.MenuBar(self)
         self.add_accel_group(self.menu_bar.accel_group)
 
-        self.vbox.pack_start(self.menu_bar.item_factory.get_widget('<main>'),
-                expand=False)
-        self.vbox.pack_start(self.controls, expand=False)
-        self.vbox.pack_start(self.hpaned)
+        self.vbox.pack_start(self.menu_bar.uimanager.get_widget('/menubar'), False, True, 0)
+        self.vbox.pack_start(self.controls, False, True, 0)
+        self.vbox.pack_start(self.hpaned, True, True, 0)
 
-        accel_group = gtk.AccelGroup()
-        accel_group.connect_group(ord('L'), gtk.gdk.CONTROL_MASK,
-                gtk.ACCEL_VISIBLE, self.focus_filter_entry)
+        accel_group = Gtk.AccelGroup()
+        accel_group.connect(ord('L'), Gdk.ModifierType.CONTROL_MASK,
+                Gtk.AccelFlags.VISIBLE, self.focus_filter_entry)
         self.add_accel_group(accel_group)
 
         self.set_default_size(int(self.__at.configuration.get('win', 'width')),
@@ -61,9 +60,9 @@ class AlbumWindow(gtk.Window):
             self.move(x, y)
 
         try:
-            gobject.timeout_add_seconds(1, self.__check_connection)
+            GObject.timeout_add_seconds(1, self.__check_connection)
         except AttributeError:
-            gobject.timeout_add(1000, self.__check_connection)
+            GObject.timeout_add(1000, self.__check_connection)
 
         self.add(self.vbox)
         self.connect('destroy', self.destroy)

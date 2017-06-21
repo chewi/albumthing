@@ -2,17 +2,17 @@
 # See COPYING file for details.
 
 
-import pygtk
-pygtk.require('2.0')
-import gtk
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk, GdkPixbuf, GLib
 
 
-CDROM = gtk.Image().render_icon(gtk.STOCK_CDROM, gtk.ICON_SIZE_DND)
+CDROM = Gtk.Image().render_icon(Gtk.STOCK_CDROM, Gtk.IconSize.DND)
 
 
 class CoverArt:
     def __init__(self, data, size):
-        pixbuf_loader = gtk.gdk.PixbufLoader()
+        pixbuf_loader = GdkPixbuf.PixbufLoader()
         self.pixbuf = None
         global foo
 
@@ -21,6 +21,11 @@ class CoverArt:
             pixbuf_loader.close()
             self.pixbuf = pixbuf_loader.get_pixbuf()
             self.pixbuf = self.pixbuf.scale_simple(size, size,
-                    gtk.gdk.INTERP_BILINEAR)
+                    GdkPixbuf.InterpType.BILINEAR)
         except Exception, detail:
             self.pixbuf = CDROM
+
+        try:
+            pixbuf_loader.close()
+        except GLib.GError:
+            pass
