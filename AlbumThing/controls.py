@@ -2,16 +2,16 @@
 # See COPYING file for details.
 
 
-from __future__ import division
+
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import GObject
 import xmmsclient
-from albumthing import AlbumThing
-from coverart import CoverArt
-import const
+from .albumthing import AlbumThing
+from .coverart import CoverArt
+from . import const
 
 
 class SeekBar(Gtk.VBox):

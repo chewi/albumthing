@@ -5,10 +5,10 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
-import menu, albumlist, playlist, controls, aboutdialog, preferencesdialog
+from . import menu, albumlist, playlist, controls, aboutdialog, preferencesdialog
 from gi.repository import GObject
-from albumthing import AlbumThing
-import const
+from .albumthing import AlbumThing
+from . import const
 
 
 class AlbumWindow(Gtk.Window):

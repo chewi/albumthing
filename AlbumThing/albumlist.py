@@ -10,9 +10,9 @@ from gi.repository import GLib, GdkPixbuf
 from xmmsclient import collections as xc
 import xmmsclient
 import operator
-from album import Album
-from albumthing import AlbumThing
-import const
+from .album import Album
+from .albumthing import AlbumThing
+from . import const
 
 
 class AlbumListThing(Gtk.VBox):
@@ -36,11 +36,11 @@ class AlbumListThing(Gtk.VBox):
 
 
     def __xmms_cb_medialib_entry_added(self, result):
-        print 'added %s' % result.value()
+        print('added %s' % result.value())
 
 
     def __xmms_cb_medialib_entry_changed(self, result):
-        print 'changed %s' % result.value()
+        print('changed %s' % result.value())
 
 
     def __gtk_cb_changed(self, editable, user_data):
@@ -110,14 +110,8 @@ class AlbumList(Gtk.TreeView):
                     ret = True
             return ret
 
-        def compare(a1, a2):
-            if not a1['album'] and not a2['album']:
-                return 0
-            elif not a1['album']:
-                return -1
-            elif not a2['album']:
-                return 1
-            return cmp(a1['album'].lower(), a2['album'].lower())
+        def compare(a):
+            return a['album'].lower() if a['album'] else ''
 
         self.list_store.clear()
         self.num_albums = 0
@@ -127,7 +121,7 @@ class AlbumList(Gtk.TreeView):
         last_artist = None
         album = None
         songs = result.value()
-        songs.sort(compare)
+        songs.sort(key=compare)
         for song in songs:
             if album and eq(last_album, song['album']) and \
                     last_artist == song['artist']:

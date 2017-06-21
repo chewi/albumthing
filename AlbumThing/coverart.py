@@ -22,7 +22,7 @@ class CoverArt:
             self.pixbuf = pixbuf_loader.get_pixbuf()
             self.pixbuf = self.pixbuf.scale_simple(size, size,
                     GdkPixbuf.InterpType.BILINEAR)
-        except Exception, detail:
+        except Exception as detail:
             self.pixbuf = CDROM
 
         try:

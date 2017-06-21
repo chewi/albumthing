@@ -61,10 +61,10 @@ class AlbumThing(object):
 
     def __init__(self):
         if AlbumThing.__instance is None:
-            from albumwindow import AlbumWindow
-            from configuration import Configuration
+            from .albumwindow import AlbumWindow
+            from .configuration import Configuration
 
-            gettext.install('albumthing', unicode=True)
+            gettext.install('albumthing')
 
             AlbumThing.__instance = AlbumThing.Singleton()
             AlbumThing.__instance.configuration = Configuration()

@@ -5,7 +5,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-import const
+from . import const
 
 
 class AboutDialog(Gtk.AboutDialog):

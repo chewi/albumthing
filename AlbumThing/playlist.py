@@ -7,8 +7,8 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import GObject, GLib
 import xmmsclient
-from albumthing import AlbumThing
-import const
+from .albumthing import AlbumThing
+from . import const
 
 
 class PlayListThing(Gtk.VBox):
