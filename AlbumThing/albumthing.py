@@ -10,6 +10,7 @@ import os
 import xmmsclient
 from xmmsclient import glib as xmmsglib
 import gettext
+from .coverartfetcher import CoverArtFetcher
 
 
 class AlbumThing(object):
@@ -18,6 +19,8 @@ class AlbumThing(object):
 
     class Singleton:
         def __init__(self):
+            self.cover_art_fetcher = CoverArtFetcher()
+
             self.connected = False
             self.xmms = xmmsclient.XMMS('AlbumThing')
             self.configuration = None
@@ -40,6 +43,7 @@ class AlbumThing(object):
                 self.xmms.connect(os.getenv('XMMS_PATH'),
                         self.__xmms_cb_disconnect)
                 self.conn = xmmsglib.GiGLibConnector(self.xmms)
+                self.cover_art_fetcher.connect()
                 self.connected = True
             except IOError:
                 self.connected = False

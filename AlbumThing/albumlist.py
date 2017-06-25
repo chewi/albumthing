@@ -14,6 +14,7 @@ from .albumthing import AlbumThing
 from .coverart import CoverArt
 from . import const
 from functools import partial
+from .coverartfetcher import CoverArtFetcher
 
 
 class AlbumListThing(Gtk.VBox):
@@ -78,13 +79,11 @@ class AlbumList(Gtk.TreeView):
         self.text_renderer = Gtk.CellRendererText()
 
         self.cover_column = Gtk.TreeViewColumn('cover')
-        self.cover_column.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)
         self.cover_column.pack_start(self.pixbuf_renderer, True)
         self.cover_column.add_attribute(self.pixbuf_renderer, 'pixbuf', 0)
         self.append_column(self.cover_column)
 
         self.name_column = Gtk.TreeViewColumn('name')
-        self.name_column.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)
         self.name_column.pack_start(self.text_renderer, True)
         self.name_column.add_attribute(self.text_renderer, 'markup', 1)
         self.append_column(self.name_column)
@@ -96,7 +95,9 @@ class AlbumList(Gtk.TreeView):
 
 
     def __xmms_cb_song_list(self, sresult, aresults):
+        self.__at.cover_art_fetcher.reset()
         self.list_store.clear()
+        self.columns_autosize()
 
         tracks = sresult['tracks']
 
@@ -127,7 +128,7 @@ class AlbumList(Gtk.TreeView):
 
             if self.__at.configuration.get('ui', 'show_cover_art'):
                 if r['cover_art']:
-                    self.__at.xmms.bindata_retrieve(r['cover_art'], cb=partial(self.set_cover, iter))
+                    self.__at.cover_art_fetcher.fetch_async(r['cover_art'], partial(self.set_cover, iter))
                 else:
                     self.list_store.set_value(iter, 0, CoverArt.fallback)
 
@@ -156,7 +157,7 @@ class AlbumList(Gtk.TreeView):
 
 
     def set_cover(self, iter, result):
-        cover_art = CoverArt(result.value(), 40)
+        cover_art = CoverArt(result, const.COVER_SIZE)
         self.list_store.set_value(iter, 0, cover_art.pixbuf)
 
 
@@ -223,7 +224,7 @@ class AlbumList(Gtk.TreeView):
                 }
             }
         }
-            
+
         aresult = self.__at.xmms.coll_query(
             xc.Intersection(acoll, xc.Complement(xc.Has(field='album_id'))),
             {
