@@ -58,7 +58,8 @@ class AlbumListThing(Gtk.VBox):
 
 
     def refresh(self):
-        self.album_list.filter(self.filter_entry.get_text())
+        text = self.filter_entry.get_text()
+        self.album_list.filter('*' + text + '*' if text else None)
 
 
 class AlbumList(Gtk.TreeView):
