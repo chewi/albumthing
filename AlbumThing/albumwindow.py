@@ -65,7 +65,7 @@ class AlbumWindow(Gtk.Window):
             GObject.timeout_add(1000, self.__check_connection)
 
         self.add(self.vbox)
-        self.connect('destroy', self.destroy)
+        self.connect('delete-event', self.destroy)
         self.show_all()
 
 
@@ -122,6 +122,7 @@ class AlbumWindow(Gtk.Window):
 
     def destroy(self, widget, data=None):
         self.__at.quit()
+        return False
 
 
     def setup_callbacks(self):
