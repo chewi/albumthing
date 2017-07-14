@@ -69,7 +69,6 @@ class AlbumList(Gtk.TreeView):
         self.__at = AlbumThing()
 
         self.set_headers_visible(False)
-        self.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
 
         self.list_store = Gtk.ListStore(GdkPixbuf.Pixbuf,
                                         GObject.TYPE_STRING,
@@ -97,6 +96,13 @@ class AlbumList(Gtk.TreeView):
 
     def __xmms_cb_song_list(self, sresult, aresults):
         self.__at.cover_art_fetcher.reset()
+
+        # The selection callback goes a little crazy when the
+        # ListStore is cleared. The only way to prevent this that I
+        # could find is to disable selection while the list is
+        # reconstructed. This didn't happen under GTK+ 2.
+        self.get_selection().set_mode(Gtk.SelectionMode.NONE)
+
         self.list_store.clear()
         self.columns_autosize()
 
@@ -132,6 +138,9 @@ class AlbumList(Gtk.TreeView):
                     self.__at.cover_art_fetcher.fetch_async(r['cover_art'], partial(self.set_cover, iter))
                 else:
                     self.list_store.set_value(iter, 0, CoverArt.fallback)
+
+        # Re-enable selection as per above.
+        self.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
 
 
     def __xmms_cb_playback_status(self, result):
